@@ -1,0 +1,139 @@
+package collections.linkedList;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+public class LinkedListTest {
+    @Test
+    public void newLinkedList() {
+        LinkedList<Integer> list = new LinkedList();
+        Assert.assertEquals(0, list.count());
+        Assert.assertTrue(list.empty());
+    }
+
+    @Test
+    public void addsToList() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        assert(list.elementAt(0)).equals(1);
+        list.add(2);
+        assert(list.elementAt(0)).equals(1);
+        assert(list.elementAt(1)).equals(2);
+        list.add(3);
+        assert(list.elementAt(2)).equals(3);
+        list.add("Not an int");
+        assert(list.elementAt(3)).equals("Not an int");
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void throwsWhenRetrievingElementOutOfBounds() {
+        LinkedList list = new LinkedList();
+        list.elementAt(0);
+    }
+
+    @Test
+    public void returnsElementAtIndex() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        assert(list.elementAt(0)).equals(1);
+        list.add(2);
+        assert(list.elementAt(1)).equals(2);
+    }
+
+    @Test
+    public void countsAllElements() {
+        LinkedList list = new LinkedList();
+        Assert.assertEquals(0, list.count());
+        list.add(1);
+        Assert.assertEquals(1, list.count());
+        list.add(2);
+        Assert.assertEquals(2, list.count());
+    }
+
+    @Test
+    public void checksForEmptyList() {
+        LinkedList list = new LinkedList();
+        Assert.assertTrue(list.empty());
+        list.add(1);
+        Assert.assertFalse(list.empty());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void throwsWhenRemovingElementOutOfBounds_empty() {
+        LinkedList list = new LinkedList();
+        list.removeAt(0);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void throwsWhenRemovingElementOutOfBounds_equalToCount() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        list.add(2);
+        list.removeAt(2);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void throwsWhenRemovingElementOutOfBounds_greaterThanCount() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        list.add(2);
+        list.removeAt(5);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void throwsWhenRemovingNegativeIndex() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        list.add(2);
+        list.removeAt(-1);
+    }
+
+    @Test
+    public void removesItemsAtIndex() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        assert(list.removeAt(0)).equals(1);
+        Assert.assertTrue(list.empty());
+        list.add(1);
+        list.add(2);
+        assert(list.removeAt(1)).equals(2);
+        assert(list.elementAt(0)).equals(1);
+        Assert.assertEquals(1, list.count());
+        list.add(2);
+        list.add(3);
+        assert(list.removeAt(2)).equals(3);
+        assert(list.elementAt(0)).equals(1);
+        assert(list.elementAt(1)).equals(2);
+        Assert.assertEquals(2, list.count());
+        list.add(3);
+        list.add(4);
+        assert(list.removeAt(2)).equals(3);
+        assert(list.elementAt(0)).equals(1);
+        assert(list.elementAt(1)).equals(2);
+        assert(list.elementAt(2)).equals(4);
+        Assert.assertEquals(3, list.count());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void popThrowsWhenEmpty() {
+        LinkedList list = new LinkedList();
+        list.pop();
+    }
+
+    @Test
+    public void popReturnsFirstElement() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        assert(list.pop()).equals(1);
+        Assert.assertEquals(0, list.count());
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        assert(list.pop()).equals(1);
+        Assert.assertEquals(2, list.count());
+        assert(list.pop()).equals(2);
+        Assert.assertEquals(1, list.count());
+        assert(list.pop()).equals(3);
+        Assert.assertEquals(0, list.count());
+    }
+}
