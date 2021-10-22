@@ -14,10 +14,7 @@ public class LinkedList<TValue> {
     }
 
     public TValue elementAt(int index) {
-        LinkedNode<TValue> node = nodeAt(index);
-        if (node == null)
-            throw new IndexOutOfBoundsException();
-        return node.value;
+        return nodeAt(index).value;
     }
 
     public int size() {
@@ -42,9 +39,8 @@ public class LinkedList<TValue> {
 
     public TValue removeAt(int index) {
         if (index == 0) return pop();
-        LinkedNode<TValue> prev = first;
-        while (--index > 0 && prev != null) prev = prev.next;
-        if (prev == null || prev.next == null || index < 0)
+        LinkedNode<TValue> prev = nodeAt(index - 1);
+        if (prev.next == null || index < 0)
             throw new IndexOutOfBoundsException();
         TValue temp = prev.next.value;
         prev.next = prev.next.next;
@@ -52,17 +48,17 @@ public class LinkedList<TValue> {
     }
 
     public TValue pop() {
-        if (first == null)
-            throw new IndexOutOfBoundsException();
-        TValue value = first.value;
-        first = first.next;
+        LinkedNode<TValue> node = nodeAt(0);
+        TValue value = node.value;
+        first = node.next;
         return value;
     }
 
     private LinkedNode<TValue> nodeAt(int index) {
         LinkedNode<TValue> node = first;
-        while (index-- > 0 && node != null)
-            node = node.next;
+        while (index-- > 0 && node != null) node = node.next;
+        if (node == null)
+            throw new IndexOutOfBoundsException();
         return node;
     }
 
