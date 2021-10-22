@@ -38,6 +38,15 @@ public class LinkedList<TValue> {
         return value == null;
     }
 
+    public boolean contains(Object o) {
+        for (LinkedList<TValue> cur = this;
+             cur != null && cur.value != null;
+             cur = cur.next)
+            if (cur.value.equals(o))
+                return true;
+        return false;
+    }
+
     public TValue removeAt(int index) {
         if (index == 0) return pop();
         LinkedList<TValue> prev = nodeAt(index - 1);

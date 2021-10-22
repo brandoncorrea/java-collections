@@ -136,4 +136,39 @@ public class LinkedListTest {
         assert(list.pop()).equals(3);
         Assert.assertEquals(0, list.size());
     }
+
+    @Test
+    public void containsIsFalseForEmptyLists() {
+        LinkedList list = new LinkedList();
+        Assert.assertFalse(list.contains(1));
+    }
+
+    @Test
+    public void containsIsFalseWhenItemIsNotInList() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        Assert.assertFalse(list.contains(4));
+    }
+
+    @Test
+    public void containsIsTrueForListOfSizeOne() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        Assert.assertTrue(list.contains(1));
+    }
+
+    @Test
+    public void containsIsTrueForAnyIndexInList() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        Assert.assertTrue(list.contains(1));
+        Assert.assertTrue(list.contains(2));
+        Assert.assertTrue(list.contains(3));
+        Assert.assertTrue(list.contains(4));
+    }
 }
