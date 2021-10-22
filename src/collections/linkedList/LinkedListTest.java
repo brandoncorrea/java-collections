@@ -8,7 +8,7 @@ public class LinkedListTest {
     public void newLinkedList() {
         LinkedList<Integer> list = new LinkedList();
         Assert.assertEquals(0, list.size());
-        Assert.assertTrue(list.empty());
+        Assert.assertTrue(list.isEmpty());
     }
 
     @Test
@@ -53,9 +53,9 @@ public class LinkedListTest {
     @Test
     public void checksForEmptyList() {
         LinkedList list = new LinkedList();
-        Assert.assertTrue(list.empty());
+        Assert.assertTrue(list.isEmpty());
         list.add(1);
-        Assert.assertFalse(list.empty());
+        Assert.assertFalse(list.isEmpty());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -93,7 +93,7 @@ public class LinkedListTest {
         LinkedList list = new LinkedList();
         list.add(1);
         assert(list.removeAt(0)).equals(1);
-        Assert.assertTrue(list.empty());
+        Assert.assertTrue(list.isEmpty());
         list.add(1);
         list.add(2);
         assert(list.removeAt(1)).equals(2);

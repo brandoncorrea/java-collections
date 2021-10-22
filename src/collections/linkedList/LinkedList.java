@@ -34,7 +34,7 @@ public class LinkedList<TValue> {
         return total;
     }
 
-    public boolean empty() {
+    public boolean isEmpty() {
         return value == null;
     }
 
