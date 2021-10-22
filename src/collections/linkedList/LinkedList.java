@@ -17,8 +17,8 @@ public class LinkedList<TValue> {
         return true;
     }
 
-    public boolean remove(TValue value) {
-        for (LinkedNode<TValue> cur = first;
+    public boolean remove(Object value) {
+        for (LinkedNode cur = first;
              cur != null;
              cur = cur.next)
             if (valuesEqual(cur.value, value))
