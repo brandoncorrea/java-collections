@@ -209,4 +209,27 @@ public class LinkedListTest {
         Object[] expected = {1, 2, 3, 4};
         Assert.assertArrayEquals(expected, list.toArray());
     }
+
+    @Test
+    public void toArrayReturnsAnEmptyListWhenGivenAnEmptyArray() {
+        LinkedList<Number> list = new LinkedList();
+        Number[] expected = {};
+        Assert.assertArrayEquals(expected, list.toArray(new Number[0]));
+    }
+
+    @Test
+    public void toArrayReturnsNullValuesWhenLinkedListIsEmpty() {
+        LinkedList list = new LinkedList();
+        Object[] expected = {null, null, null};
+        Assert.assertArrayEquals(expected, list.toArray(new Object[] {1, 2, 3}));
+    }
+
+    @Test
+    public void toArrayOnlyTakesItemsForTheSizeOfTheArray() {
+        LinkedList list = new LinkedList();
+        for (int item : new int[] {1, 2, 3, 4})
+            list.add(item);
+        Object[] expected = {1, 2};
+        Assert.assertArrayEquals(expected, list.toArray(new Object[2]));
+    }
 }

@@ -44,6 +44,17 @@ public class LinkedList<TValue> {
         return list;
     }
 
+    public TValue[] toArray(TValue[] a) {
+        int index = 0;
+        for (LinkedNode<TValue> cur = first;
+             cur != null && index < a.length;
+             cur = cur.next)
+            a[index++] = cur.value;
+        while (index < a.length)
+            a[index++] = null;
+        return a;
+    }
+
     public TValue removeAt(int index) {
         if (index == 0) return pop();
         LinkedNode<TValue> prev = nodeAt(index - 1);
