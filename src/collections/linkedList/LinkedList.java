@@ -4,7 +4,7 @@ public class LinkedList<TValue> {
     private LinkedNode<TValue> first;
     private int size = 0;
 
-    public void add(TValue value) {
+    public boolean add(TValue value) {
         if (first == null)
             first = new LinkedNode(value);
         else {
@@ -13,6 +13,7 @@ public class LinkedList<TValue> {
             tail.next = new LinkedNode(value);
         }
         size++;
+        return true;
     }
 
     public TValue elementAt(int index) {

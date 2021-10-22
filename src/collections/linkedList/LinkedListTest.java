@@ -25,6 +25,11 @@ public class LinkedListTest {
         assert(list.elementAt(3)).equals("Not an int");
     }
 
+    @Test
+    public void addResultsInTrue() {
+        Assert.assertTrue(new LinkedList().add(1));
+    }
+
     @Test(expected = IndexOutOfBoundsException.class)
     public void throwsWhenRetrievingElementOutOfBounds() {
         LinkedList list = new LinkedList();
