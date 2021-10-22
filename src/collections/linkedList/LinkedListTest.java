@@ -237,4 +237,52 @@ public class LinkedListTest {
         Object[] expected = {1, 2};
         Assert.assertArrayEquals(expected, list.toArray(new Object[2]));
     }
+
+    @Test
+    public void removingFromEmptyListResultsInFalse() {
+        Assert.assertFalse(new LinkedList().remove(1));
+    }
+
+    @Test
+    public void removingItemNotInListResultsInFalse() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        Assert.assertFalse(list.remove(2));
+        Assert.assertArrayEquals(new Number[] {1}, list.toArray());
+    }
+
+    @Test
+    public void removesFirstItemInList() {
+        LinkedList list = new LinkedList();
+        for (int i : new int[] {1, 2, 3})
+            list.add(i);
+        Assert.assertTrue(list.remove(1));
+        Assert.assertArrayEquals(new Number[] {2, 3}, list.toArray());
+    }
+
+    @Test
+    public void removesNullItemFromList() {
+        LinkedList list = new LinkedList();
+        list.add(null);
+        Assert.assertTrue(list.remove(null));
+        Assert.assertArrayEquals(new Object[0], list.toArray());
+    }
+
+    @Test
+    public void removesLastItemFromList() {
+        LinkedList list = new LinkedList();
+        for (int i : new int[] {1, 2, 3})
+            list.add(i);
+        Assert.assertTrue(list.remove(3));
+        Assert.assertArrayEquals(new Number[]{1, 2}, list.toArray());
+    }
+
+    @Test
+    public void removesOnlyTheFirstOccurrenceOfAnItem() {
+        LinkedList list = new LinkedList();
+        for (int i : new int[] {2, 1, 2, 1, 2})
+            list.add(i);
+        Assert.assertTrue(list.remove(1));
+        Assert.assertArrayEquals(new Number[] {2, 2, 1, 2}, list.toArray());
+    }
 }
