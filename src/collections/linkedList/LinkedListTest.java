@@ -171,4 +171,17 @@ public class LinkedListTest {
         Assert.assertTrue(list.contains(3));
         Assert.assertTrue(list.contains(4));
     }
+
+    @Test
+    public void containsIsFalseForNullValues() {
+        LinkedList list = new LinkedList();
+        Assert.assertFalse(list.contains(null));
+    }
+
+    @Test
+    public void containsIsTrueWhenListContainsNull() {
+        LinkedList list = new LinkedList();
+        list.add(null);
+        Assert.assertTrue(list.contains(null));
+    }
 }

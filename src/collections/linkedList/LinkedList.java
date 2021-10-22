@@ -1,56 +1,50 @@
 package collections.linkedList;
 
 public class LinkedList<TValue> {
-    private LinkedList<TValue> next;
-    private TValue value;
+    private LinkedNode<TValue> first;
 
     public void add(TValue value) {
-        if (this.value == null)
-            this.value = value;
+        if (first == null)
+            first = new LinkedNode(value);
         else {
-            LinkedList<TValue> tail = this;
-            while(tail.next != null)
-                tail = tail.next;
-            tail.next = new LinkedList();
-            tail.next.value = value;
+            LinkedNode<TValue> tail = first;
+            while (tail.next != null) tail = tail.next;
+            tail.next = new LinkedNode(value);
         }
     }
 
     public TValue elementAt(int index) {
-        LinkedList<TValue> node = nodeAt(index);
-        if (node.value == null)
+        LinkedNode<TValue> node = nodeAt(index);
+        if (node == null)
             throw new IndexOutOfBoundsException();
         return node.value;
     }
 
     public int size() {
-        if (value == null) return 0;
-        LinkedList<TValue> cur = this;
-        int total = 0;
-        while(cur != null) {
-            cur = cur.next;
-            total++;
-        }
-        return total;
+        LinkedNode<TValue> cur = first;
+        int count = 0;
+        for (; cur != null; cur = cur.next) count++;
+        return count;
     }
 
     public boolean isEmpty() {
-        return value == null;
+        return first == null;
     }
 
     public boolean contains(Object o) {
-        for (LinkedList<TValue> cur = this;
-             cur != null && cur.value != null;
+        for (LinkedNode cur = first;
+             cur != null;
              cur = cur.next)
-            if (cur.value.equals(o))
+            if (valuesEqual(cur.value, o))
                 return true;
         return false;
     }
 
     public TValue removeAt(int index) {
         if (index == 0) return pop();
-        LinkedList<TValue> prev = nodeAt(index - 1);
-        if (prev.next == null || index < 0)
+        LinkedNode<TValue> prev = first;
+        while (--index > 0 && prev != null) prev = prev.next;
+        if (prev == null || prev.next == null || index < 0)
             throw new IndexOutOfBoundsException();
         TValue temp = prev.next.value;
         prev.next = prev.next.next;
@@ -58,21 +52,23 @@ public class LinkedList<TValue> {
     }
 
     public TValue pop() {
-        if (value == null)
+        if (first == null)
             throw new IndexOutOfBoundsException();
-        TValue temp = value;
-        this.value = null;
-        if (next != null) {
-            this.value = next.value;
-            this.next = this.next.next;
-        }
-        return temp;
+        TValue value = first.value;
+        first = first.next;
+        return value;
     }
 
-    private LinkedList<TValue> nodeAt(int index) {
-        LinkedList<TValue> node = this;
-        while (index-- > 0 && node.next != null)
+    private LinkedNode<TValue> nodeAt(int index) {
+        LinkedNode<TValue> node = first;
+        while (index-- > 0 && node != null)
             node = node.next;
         return node;
+    }
+
+    private boolean valuesEqual (Object a, Object b) {
+        return a == null &&
+                b == null ||
+                a.equals(b);
     }
 }
