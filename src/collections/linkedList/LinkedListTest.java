@@ -7,7 +7,7 @@ public class LinkedListTest {
     @Test
     public void newLinkedList() {
         LinkedList<Integer> list = new LinkedList();
-        Assert.assertEquals(0, list.count());
+        Assert.assertEquals(0, list.size());
         Assert.assertTrue(list.empty());
     }
 
@@ -43,11 +43,11 @@ public class LinkedListTest {
     @Test
     public void countsAllElements() {
         LinkedList list = new LinkedList();
-        Assert.assertEquals(0, list.count());
+        Assert.assertEquals(0, list.size());
         list.add(1);
-        Assert.assertEquals(1, list.count());
+        Assert.assertEquals(1, list.size());
         list.add(2);
-        Assert.assertEquals(2, list.count());
+        Assert.assertEquals(2, list.size());
     }
 
     @Test
@@ -98,20 +98,20 @@ public class LinkedListTest {
         list.add(2);
         assert(list.removeAt(1)).equals(2);
         assert(list.elementAt(0)).equals(1);
-        Assert.assertEquals(1, list.count());
+        Assert.assertEquals(1, list.size());
         list.add(2);
         list.add(3);
         assert(list.removeAt(2)).equals(3);
         assert(list.elementAt(0)).equals(1);
         assert(list.elementAt(1)).equals(2);
-        Assert.assertEquals(2, list.count());
+        Assert.assertEquals(2, list.size());
         list.add(3);
         list.add(4);
         assert(list.removeAt(2)).equals(3);
         assert(list.elementAt(0)).equals(1);
         assert(list.elementAt(1)).equals(2);
         assert(list.elementAt(2)).equals(4);
-        Assert.assertEquals(3, list.count());
+        Assert.assertEquals(3, list.size());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -125,15 +125,15 @@ public class LinkedListTest {
         LinkedList list = new LinkedList();
         list.add(1);
         assert(list.pop()).equals(1);
-        Assert.assertEquals(0, list.count());
+        Assert.assertEquals(0, list.size());
         list.add(1);
         list.add(2);
         list.add(3);
         assert(list.pop()).equals(1);
-        Assert.assertEquals(2, list.count());
+        Assert.assertEquals(2, list.size());
         assert(list.pop()).equals(2);
-        Assert.assertEquals(1, list.count());
+        Assert.assertEquals(1, list.size());
         assert(list.pop()).equals(3);
-        Assert.assertEquals(0, list.count());
+        Assert.assertEquals(0, list.size());
     }
 }

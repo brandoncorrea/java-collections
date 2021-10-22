@@ -23,7 +23,7 @@ public class LinkedList<TValue> {
         return node.value;
     }
 
-    public int count() {
+    public int size() {
         if (value == null) return 0;
         LinkedList<TValue> cur = this;
         int total = 0;
