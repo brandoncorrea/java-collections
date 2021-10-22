@@ -184,4 +184,29 @@ public class LinkedListTest {
         list.add(null);
         Assert.assertTrue(list.contains(null));
     }
+
+    @Test
+    public void toArrayWorksWithEmptyList() {
+        LinkedList list = new LinkedList();
+        Assert.assertArrayEquals(new Object[0], list.toArray());
+    }
+
+    @Test
+    public void toArrayWorksWithSingleElementlist() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        Object[] expected = {1};
+        Assert.assertArrayEquals(expected, list.toArray());
+    }
+
+    @Test
+    public void toArrayWorksWithManyItems() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        Object[] expected = {1, 2, 3, 4};
+        Assert.assertArrayEquals(expected, list.toArray());
+    }
 }

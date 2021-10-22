@@ -2,6 +2,7 @@ package collections.linkedList;
 
 public class LinkedList<TValue> {
     private LinkedNode<TValue> first;
+    private int size = 0;
 
     public void add(TValue value) {
         if (first == null)
@@ -11,6 +12,7 @@ public class LinkedList<TValue> {
             while (tail.next != null) tail = tail.next;
             tail.next = new LinkedNode(value);
         }
+        size++;
     }
 
     public TValue elementAt(int index) {
@@ -18,14 +20,11 @@ public class LinkedList<TValue> {
     }
 
     public int size() {
-        LinkedNode<TValue> cur = first;
-        int count = 0;
-        for (; cur != null; cur = cur.next) count++;
-        return count;
+        return size;
     }
 
     public boolean isEmpty() {
-        return first == null;
+        return size == 0;
     }
 
     public boolean contains(Object o) {
@@ -37,6 +36,14 @@ public class LinkedList<TValue> {
         return false;
     }
 
+    public Object[] toArray() {
+        Object[] list = new Object[size];
+        LinkedNode cur = first;
+        for (int index = 0; cur != null; cur = cur.next)
+            list[index++] = cur.value;
+        return list;
+    }
+
     public TValue removeAt(int index) {
         if (index == 0) return pop();
         LinkedNode<TValue> prev = nodeAt(index - 1);
@@ -44,6 +51,7 @@ public class LinkedList<TValue> {
             throw new IndexOutOfBoundsException();
         TValue temp = prev.next.value;
         prev.next = prev.next.next;
+        size--;
         return temp;
     }
 
@@ -51,6 +59,7 @@ public class LinkedList<TValue> {
         LinkedNode<TValue> node = nodeAt(0);
         TValue value = node.value;
         first = node.next;
+        size--;
         return value;
     }
 
