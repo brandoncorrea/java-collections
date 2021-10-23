@@ -21,7 +21,7 @@ public class LinkedList<TValue> {
     }
 
     public boolean remove(Object value) {
-        return removeNode(find(node -> valuesEqual(node.value, value)));
+        return removeNode(findNodeWithValue(value));
     }
 
     public TValue removeAt(int index) {
@@ -31,12 +31,12 @@ public class LinkedList<TValue> {
     }
 
     public TValue pop() { return removeAt(0); }
-    public TValue elementAt(int index) { return nodeAt(index).value; }
+    public TValue get(int index) { return nodeAt(index).value; }
     public int size() { return size; }
     public boolean isEmpty() { return size == 0; }
 
-    public boolean contains(Object o) {
-        return find(node -> valuesEqual(node.value, o)) != null;
+    public boolean contains(Object value) {
+        return findNodeWithValue(value) != null;
     }
 
     public Object[] toArray() {
@@ -78,15 +78,19 @@ public class LinkedList<TValue> {
         return node;
     }
 
-    private LinkedNode<TValue> find(Function<LinkedNode, Boolean> predicate) {
-        for (LinkedNode node = first; node != null; node = node.next)
+    private LinkedNode<TValue> findNodeWithValue(Object value) {
+        return find(node -> valuesEqual(node.value, value));
+    }
+
+    private LinkedNode<TValue> find(Function<LinkedNode<TValue>, Boolean> predicate) {
+        for (LinkedNode<TValue> node = first; node != null; node = node.next)
             if (predicate.apply(node))
                 return node;
         return null;
     }
 
-    private void forEach(Consumer<LinkedNode> action) {
-        for (LinkedNode node = first; node != null; node = node.next)
+    private void forEach(Consumer<LinkedNode<TValue>> action) {
+        for (LinkedNode<TValue> node = first; node != null; node = node.next)
             action.accept(node);
     }
 

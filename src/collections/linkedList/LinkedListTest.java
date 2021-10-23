@@ -15,14 +15,14 @@ public class LinkedListTest {
     public void addsToList() {
         LinkedList list = new LinkedList();
         list.add(1);
-        assert(list.elementAt(0)).equals(1);
+        assert(list.get(0)).equals(1);
         list.add(2);
-        assert(list.elementAt(0)).equals(1);
-        assert(list.elementAt(1)).equals(2);
+        assert(list.get(0)).equals(1);
+        assert(list.get(1)).equals(2);
         list.add(3);
-        assert(list.elementAt(2)).equals(3);
+        assert(list.get(2)).equals(3);
         list.add("Not an int");
-        assert(list.elementAt(3)).equals("Not an int");
+        assert(list.get(3)).equals("Not an int");
     }
 
     @Test
@@ -33,16 +33,16 @@ public class LinkedListTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void throwsWhenRetrievingElementOutOfBounds() {
         LinkedList list = new LinkedList();
-        list.elementAt(0);
+        list.get(0);
     }
 
     @Test
     public void returnsElementAtIndex() {
         LinkedList list = new LinkedList();
         list.add(1);
-        assert(list.elementAt(0)).equals(1);
+        assert(list.get(0)).equals(1);
         list.add(2);
-        assert(list.elementAt(1)).equals(2);
+        assert(list.get(1)).equals(2);
     }
 
     @Test
@@ -102,20 +102,20 @@ public class LinkedListTest {
         list.add(1);
         list.add(2);
         assert(list.removeAt(1)).equals(2);
-        assert(list.elementAt(0)).equals(1);
+        assert(list.get(0)).equals(1);
         Assert.assertEquals(1, list.size());
         list.add(2);
         list.add(3);
         assert(list.removeAt(2)).equals(3);
-        assert(list.elementAt(0)).equals(1);
-        assert(list.elementAt(1)).equals(2);
+        assert(list.get(0)).equals(1);
+        assert(list.get(1)).equals(2);
         Assert.assertEquals(2, list.size());
         list.add(3);
         list.add(4);
         assert(list.removeAt(2)).equals(3);
-        assert(list.elementAt(0)).equals(1);
-        assert(list.elementAt(1)).equals(2);
-        assert(list.elementAt(2)).equals(4);
+        assert(list.get(0)).equals(1);
+        assert(list.get(1)).equals(2);
+        assert(list.get(2)).equals(4);
         Assert.assertEquals(3, list.size());
     }
 
