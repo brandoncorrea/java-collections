@@ -285,4 +285,42 @@ public class LinkedListTest {
         Assert.assertTrue(list.remove(1));
         Assert.assertArrayEquals(new Number[] {2, 2, 1, 2}, list.toArray());
     }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void throwsWhenAttemptingToSetValuesInEmptyLists() {
+        LinkedList list = new LinkedList();
+        list.set(0, 1);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void throwsWhenAttemptingToSetValuesOutOfBounds() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.set(3, 1);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void throwsWhenAttemptingToSetNegativeIndices() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.set(3, -1);
+    }
+
+    @Test
+    public void setsElementsToNewValues() {
+        LinkedList list = new LinkedList();
+        list.add(1);
+        Assert.assertEquals(1, list.set(0, 2));
+        Assert.assertEquals(2, list.get(0));
+        list.add(3);
+        list.add(4);
+        Assert.assertEquals(3, list.set(1, 0));
+        Assert.assertEquals(0, list.get(1));
+        Assert.assertEquals(4, list.set(2, 5));
+        Assert.assertEquals(5, list.get(2));
+    }
 }

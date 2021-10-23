@@ -20,6 +20,13 @@ public class LinkedList<TValue> {
         return true;
     }
 
+    public TValue set(int index, TValue value) {
+        LinkedNode<TValue> node = nodeAt(index);
+        TValue prev = node.value;
+        node.value = value;
+        return prev;
+    }
+
     public boolean remove(Object value) {
         return removeNode(findNodeWithValue(value));
     }
