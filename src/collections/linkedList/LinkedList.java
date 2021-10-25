@@ -20,6 +20,20 @@ public class LinkedList<TValue> {
         return true;
     }
 
+    public boolean add(int index, TValue value) {
+        LinkedNode<TValue> node = nodeAt(index);
+        LinkedNode newNode = new LinkedNode(value);
+        newNode.next = node;
+        newNode.prev = node.prev;
+        if (node.prev == null)
+            first = newNode;
+        else
+            node.prev.next = newNode;
+        node.prev = newNode;
+        size++;
+        return true;
+    }
+
     public TValue set(int index, TValue value) {
         LinkedNode<TValue> node = nodeAt(index);
         TValue prev = node.value;
