@@ -349,7 +349,7 @@ public class LinkedListTest {
     public void insertsItemAtZeroIndex() {
         LinkedList<String> list = new LinkedList<>();
         list.add("a");
-        list.add(0, "b");
+        Assert.assertTrue(list.add(0, "b"));
         Assert.assertEquals("b", list.get(0));
         Assert.assertEquals("a", list.get(1));
     }
@@ -399,5 +399,28 @@ public class LinkedListTest {
         Assert.assertEquals(0, list.indexOf("a"));
         list.add("c");
         Assert.assertEquals(3, list.indexOf("c"));
+    }
+
+    @Test
+    public void lastIndexResultsInNegativeOne() {
+        LinkedList<String> list = new LinkedList<>();
+        Assert.assertEquals(-1, list.lastIndexOf("a"));
+        list.add("a");
+        Assert.assertEquals(-1, list.lastIndexOf("b"));
+        list.add("b");
+        Assert.assertEquals(-1, list.lastIndexOf("c"));
+        list.add("c");
+        Assert.assertEquals(-1, list.lastIndexOf("d"));
+    }
+
+    @Test
+    public void lastIndexReturnsLastInstanceOfValue() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        Assert.assertEquals(0, list.lastIndexOf("a"));
+        list.add("b");
+        Assert.assertEquals(1, list.lastIndexOf("b"));
+        list.add("a");
+        Assert.assertEquals(2, list.lastIndexOf("a"));
     }
 }

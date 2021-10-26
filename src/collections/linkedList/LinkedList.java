@@ -93,6 +93,17 @@ public class LinkedList<TValue> {
         return found == null ? -1 : index.get();
     }
 
+    public int lastIndexOf(Object value) {
+        AtomicInteger index = new AtomicInteger(-1);
+        AtomicInteger lastIndex = new AtomicInteger(-1);
+        forEach(node -> {
+            index.getAndIncrement();
+            if (Objects.equals(node.value, value))
+                lastIndex.set(index.get());
+        });
+        return lastIndex.get();
+    }
+
     private boolean removeNode(LinkedNode<TValue> node) {
         if (node == null) return false;
         if (node.prev == null) {
