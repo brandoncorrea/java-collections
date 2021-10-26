@@ -3,10 +3,8 @@ package collections.linkedList;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.sql.Array;
 import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Vector;
 
 public class LinkedListTest {
@@ -503,7 +501,7 @@ public class LinkedListTest {
         list.add("b");
         list.add("c");
         Iterator<String> iterator = list.iterator();
-        Assert.assertEquals(iterator.getClass(), new LinkedListIterator<String>().getClass());
+        Assert.assertEquals(iterator.getClass(), new LinkedIterator<String>().getClass());
         Assert.assertEquals("a", iterator.next());
         Assert.assertEquals("b", iterator.next());
         Assert.assertEquals("c", iterator.next());

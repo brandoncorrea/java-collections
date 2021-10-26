@@ -3,12 +3,12 @@ package collections.linkedList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class LinkedListIterator<TValue> implements Iterator<TValue> {
+public class LinkedIterator<TValue> implements Iterator<TValue> {
 
     private LinkedNode<TValue> currentNode;
 
-    public LinkedListIterator() { }
-    public LinkedListIterator(LinkedNode<TValue> node) {
+    public LinkedIterator() { }
+    public LinkedIterator(LinkedNode<TValue> node) {
         currentNode = node;
     }
 

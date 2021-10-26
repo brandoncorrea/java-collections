@@ -69,7 +69,7 @@ public class LinkedList<TValue> {
     }
 
     public Iterator<TValue> iterator() {
-        return new LinkedListIterator<>(first);
+        return new LinkedIterator<>(first);
     }
 
     public Object[] toArray() {

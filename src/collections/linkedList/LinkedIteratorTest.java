@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-public class LinkedListIteratorTest {
+public class LinkedIteratorTest {
 
     @Test
     public void newIterator() {
@@ -13,9 +13,9 @@ public class LinkedListIteratorTest {
         first.next = new LinkedNode<>("b");
         first.next.next = new LinkedNode<>("c");
         List<String> expected = new Vector<>();
-        Assert.assertEquals(expected.iterator().hasNext(), new LinkedListIterator<>().hasNext());
+        Assert.assertEquals(expected.iterator().hasNext(), new LinkedIterator<>().hasNext());
         Collections.addAll(expected, "a", "b", "c");
-        Iterator<String> listIterator = new LinkedListIterator<>(first);
+        Iterator<String> listIterator = new LinkedIterator<>(first);
         Iterator<String> vectorIterator = expected.iterator();
         Assert.assertEquals(listIterator.hasNext(), vectorIterator.hasNext());
         Assert.assertEquals(listIterator.next(), vectorIterator.next());
@@ -28,6 +28,6 @@ public class LinkedListIteratorTest {
 
     @Test(expected = NoSuchElementException.class)
     public void iteratorThrowsOnNextForEmptyList() {
-        new LinkedListIterator<>().next();
+        new LinkedIterator<>().next();
     }
 }
