@@ -1,5 +1,9 @@
 package collections.linkedList;
 
+import com.sun.tools.javac.code.Attribute;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -7,6 +11,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class LinkedList<TValue> {
+
     private LinkedNode<TValue> first;
     private int size = 0;
 
@@ -22,7 +27,7 @@ public class LinkedList<TValue> {
         return true;
     }
 
-    public boolean add(int index, TValue value) {
+    public void add(int index, TValue value) {
         LinkedNode<TValue> node = nodeAt(index);
         LinkedNode<TValue> newNode = new LinkedNode<>(value);
         newNode.next = node;
@@ -33,7 +38,6 @@ public class LinkedList<TValue> {
             node.prev.next = newNode;
         node.prev = newNode;
         size++;
-        return true;
     }
 
     public TValue set(int index, TValue value) {
@@ -74,15 +78,16 @@ public class LinkedList<TValue> {
         return list;
     }
 
-    public TValue[] toArray(TValue[] a) {
+    public <T> T[] toArray(T[] source) {
+        if (source.length <= size)
+            return (T[])toArray();
         int index = 0;
         for (LinkedNode<TValue> cur = first;
-             cur != null && index < a.length;
+             cur != null && index < source.length;
              cur = cur.next)
-            a[index++] = cur.value;
-        while (index < a.length)
-            a[index++] = null;
-        return a;
+            source[index++] = (T)cur.value;
+        source[index] = null;
+        return source;
     }
 
     public int indexOf(Object value) {

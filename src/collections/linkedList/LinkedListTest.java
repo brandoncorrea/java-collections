@@ -227,19 +227,32 @@ public class LinkedListTest {
     }
 
     @Test
-    public void toArrayReturnsNullValuesWhenLinkedListIsEmpty() {
+    public void toArraySetsNextElementToNull() {
         LinkedList<String> list = new LinkedList<>();
-        String[] expected = {null, null, null};
-        Assert.assertArrayEquals(expected, list.toArray(new String[] {"a", "b", "d"}));
+        String[] testArray = {"a", "b", "c"};
+        String[] expected = {null, "b", "c"};
+        Assert.assertArrayEquals(expected, list.toArray(testArray));
+        list.add("z");
+        expected = new String[] {"z", null, "c"};
+        Assert.assertArrayEquals(expected, list.toArray(testArray));
     }
 
     @Test
-    public void toArrayOnlyTakesItemsForTheSizeOfTheArray() {
+    public void toArrayResizesArrayIfTooSmall() {
         LinkedList<String> list = new LinkedList<>();
-        for (String item : new String[] {"a", "b", "c", "d"})
+        String[] expected = {"a", "b", "c", "d"};
+        for (String item : expected)
             list.add(item);
-        String[] expected = {"a", "b"};
         Assert.assertArrayEquals(expected, list.toArray(new String[2]));
+    }
+
+    @Test
+    public void toArrayCastsToTypeParameter() {
+        LinkedList<Integer> list = new LinkedList<>();
+        list.add(1);
+        list.add(2);
+        Number[] expected = new Number[] {1, 2};
+        Assert.assertArrayEquals(expected, list.toArray(new Number[0]));
     }
 
     @Test
@@ -353,7 +366,7 @@ public class LinkedListTest {
     public void insertsItemAtZeroIndex() {
         LinkedList<String> list = new LinkedList<>();
         list.add("a");
-        Assert.assertTrue(list.add(0, "b"));
+        list.add(0, "b");
         Assert.assertEquals("b", list.get(0));
         Assert.assertEquals("a", list.get(1));
     }
