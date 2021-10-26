@@ -10,20 +10,23 @@ public class LinkedIteratorTest {
     @Test
     public void newIterator() {
         LinkedNode<String> first = new LinkedNode<>("a");
-        first.next = new LinkedNode<>("b");
-        first.next.next = new LinkedNode<>("c");
-        List<String> expected = new Vector<>();
-        Assert.assertEquals(expected.iterator().hasNext(), new LinkedIterator<>().hasNext());
-        Collections.addAll(expected, "a", "b", "c");
-        Iterator<String> listIterator = new LinkedIterator<>(first);
-        Iterator<String> vectorIterator = expected.iterator();
-        Assert.assertEquals(listIterator.hasNext(), vectorIterator.hasNext());
-        Assert.assertEquals(listIterator.next(), vectorIterator.next());
-        Assert.assertEquals(listIterator.hasNext(), vectorIterator.hasNext());
-        Assert.assertEquals(listIterator.next(), vectorIterator.next());
-        Assert.assertEquals(listIterator.hasNext(), vectorIterator.hasNext());
-        Assert.assertEquals(listIterator.next(), vectorIterator.next());
-        Assert.assertEquals(listIterator.hasNext(), vectorIterator.hasNext());
+        Assert.assertTrue(new LinkedIterator<>(first).hasNext());
+        Assert.assertFalse(new LinkedIterator<>().hasNext());
+    }
+
+    @Test
+    public void retrievesNextValues() {
+        LinkedNode<String> first = new LinkedNode<>("a");
+        first.addAfter("b");
+        first.next.addAfter("c");
+        Iterator<String> iterator = new LinkedIterator<>(first);
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals("a", iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals("b", iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals("c", iterator.next());
+        Assert.assertFalse(iterator.hasNext());
     }
 
     @Test(expected = NoSuchElementException.class)

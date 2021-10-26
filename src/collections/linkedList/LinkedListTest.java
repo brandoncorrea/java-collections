@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Vector;
 
 public class LinkedListTest {
@@ -495,13 +496,26 @@ public class LinkedListTest {
     }
 
     @Test
-    public void createsLinkedListIterator() {
+    public void createsIterator() {
         LinkedList<String> list = new LinkedList<>();
         list.add("a");
         list.add("b");
         list.add("c");
         Iterator<String> iterator = list.iterator();
         Assert.assertEquals(iterator.getClass(), new LinkedIterator<String>().getClass());
+        Assert.assertEquals("a", iterator.next());
+        Assert.assertEquals("b", iterator.next());
+        Assert.assertEquals("c", iterator.next());
+    }
+
+    @Test
+    public void createsListIterator() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        ListIterator<String> iterator = list.listIterator();
+        Assert.assertEquals(iterator.getClass(), new LinkedListIterator<String>().getClass());
         Assert.assertEquals("a", iterator.next());
         Assert.assertEquals("b", iterator.next());
         Assert.assertEquals("c", iterator.next());
