@@ -3,6 +3,10 @@ package collections.linkedList;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.sql.Array;
+import java.util.List;
+import java.util.Vector;
+
 public class LinkedListTest {
     @Test
     public void newLinkedList() {
@@ -435,5 +439,45 @@ public class LinkedListTest {
         Assert.assertTrue(31 * 31 < list.hashCode());
         list.add("c");
         Assert.assertTrue(31 * 31 * 31 < list.hashCode());
+    }
+
+    @Test
+    public void equalsTrueForListsWithEqualMembers() {
+        LinkedList<String> linked = new LinkedList<>();
+        List<String> vector = new Vector<>();
+        Assert.assertTrue(linked.equals(vector));
+        linked.add("a");
+        vector.add("a");
+        Assert.assertTrue(linked.equals(vector));
+        linked.add("b");
+        vector.add("b");
+        Assert.assertTrue(linked.equals(vector));
+    }
+
+    @Test
+    public void equalsFalseForListsWithUnequalMembers() {
+        LinkedList<String> linked = new LinkedList<>();
+        List<String> vector = new Vector<>();
+        linked.add("a");
+        Assert.assertFalse(linked.equals(vector));
+        vector.add("a");
+        Assert.assertFalse(new LinkedList<String>().equals(vector));
+        linked.add("b");
+        linked.add("c");
+        vector.add("c");
+        vector.add("b");
+        Assert.assertFalse(linked.equals(vector));
+        linked.clear();
+        vector.clear();
+        linked.add("a");
+        vector.add("b");
+        Assert.assertFalse(linked.equals(vector));
+    }
+
+    @Test
+    public void equalsFalseIfObjectIsNotList() {
+        LinkedList<String> list = new LinkedList<>();
+        String[] array = new String[0];
+        Assert.assertFalse(list.equals(array));
     }
 }

@@ -1,5 +1,6 @@
 package collections.linkedList;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -111,6 +112,19 @@ public class LinkedList<TValue> {
             hash.set(31 * hash.get() + nodeHash);
         });
         return hash.get();
+    }
+
+    public boolean equals(Object list) {
+        if (!(list instanceof List) || ((List<?>) list).size() != size)
+            return false;
+
+        LinkedNode<TValue> cur = first;
+        for (Object value : (List<?>)list) {
+            if (!Objects.equals(value, cur.value))
+                return false;
+            cur = cur.next;
+        }
+        return true;
     }
 
     private boolean removeNode(LinkedNode<TValue> node) {
