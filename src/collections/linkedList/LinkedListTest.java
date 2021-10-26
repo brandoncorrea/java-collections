@@ -365,5 +365,39 @@ public class LinkedListTest {
         list.add(3, "e");
         Assert.assertArrayEquals(new Object[] {"a", "d", "b", "e", "c"}, list.toArray());
     }
-}
 
+    @Test
+    public void clearsAllItemsFromList() {
+        LinkedList<String> list = new LinkedList<>();
+        Assert.assertEquals(0, list.size());
+        list.clear();
+        Assert.assertEquals(0, list.size());
+        list.add("a");
+        list.clear();
+        Assert.assertEquals(0, list.size());
+        Assert.assertArrayEquals(new Object[0], list.toArray());
+    }
+
+    @Test
+    public void indexResultsInNegativeOne() {
+        LinkedList<String> list = new LinkedList<>();
+        Assert.assertEquals(-1, list.indexOf("a"));
+        list.add("a");
+        Assert.assertEquals(-1, list.indexOf("b"));
+        list.add("b");
+        Assert.assertEquals(-1, list.indexOf("c"));
+    }
+
+    @Test
+    public void returnsIndexOfFirstOccurrenceForValue() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        Assert.assertEquals(0, list.indexOf("a"));
+        list.add("b");
+        Assert.assertEquals(1, list.indexOf("b"));
+        list.add("a");
+        Assert.assertEquals(0, list.indexOf("a"));
+        list.add("c");
+        Assert.assertEquals(3, list.indexOf("c"));
+    }
+}

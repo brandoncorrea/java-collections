@@ -52,6 +52,11 @@ public class LinkedList<TValue> {
         return node.value;
     }
 
+    public void clear() {
+        first = null;
+        size = 0;
+    }
+
     public TValue pop() { return remove(0); }
     public TValue get(int index) { return nodeAt(index).value; }
     public int size() { return size; }
@@ -77,6 +82,15 @@ public class LinkedList<TValue> {
         while (index < a.length)
             a[index++] = null;
         return a;
+    }
+
+    public int indexOf(Object value) {
+        AtomicInteger index = new AtomicInteger(-1);
+        LinkedNode<TValue> found = find(node -> {
+            index.getAndIncrement();
+            return Objects.equals(node.value, value);
+        });
+        return found == null ? -1 : index.get();
     }
 
     private boolean removeNode(LinkedNode<TValue> node) {
