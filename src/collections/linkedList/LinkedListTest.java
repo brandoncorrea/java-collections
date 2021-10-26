@@ -6,263 +6,264 @@ import org.junit.Test;
 public class LinkedListTest {
     @Test
     public void newLinkedList() {
-        LinkedList<Integer> list = new LinkedList();
+        LinkedList<Integer> list = new LinkedList<>();
         Assert.assertEquals(0, list.size());
         Assert.assertTrue(list.isEmpty());
     }
 
     @Test
     public void addsToList() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        assert(list.get(0)).equals(1);
-        list.add(2);
-        assert(list.get(0)).equals(1);
-        assert(list.get(1)).equals(2);
-        list.add(3);
-        assert(list.get(2)).equals(3);
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        assert(list.get(0)).equals("a");
+        list.add("b");
+        assert(list.get(0)).equals("a");
+        assert(list.get(1)).equals("b");
+        list.add("c");
+        assert(list.get(2)).equals("c");
         list.add("Not an int");
         assert(list.get(3)).equals("Not an int");
     }
 
     @Test
     public void addResultsInTrue() {
-        Assert.assertTrue(new LinkedList().add(1));
+        Assert.assertTrue(new LinkedList<>().add("A"));
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void throwsWhenRetrievingElementOutOfBounds() {
-        LinkedList list = new LinkedList();
+        LinkedList<String> list = new LinkedList<>();
         list.get(0);
     }
 
     @Test
     public void returnsElementAtIndex() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        assert(list.get(0)).equals(1);
-        list.add(2);
-        assert(list.get(1)).equals(2);
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        assert(list.get(0)).equals("a");
+        list.add("b");
+        assert(list.get(1)).equals("b");
     }
 
     @Test
     public void countsAllElements() {
-        LinkedList list = new LinkedList();
+        LinkedList<String> list = new LinkedList<>();
         Assert.assertEquals(0, list.size());
-        list.add(1);
+        list.add("a");
         Assert.assertEquals(1, list.size());
-        list.add(2);
+        list.add("b");
         Assert.assertEquals(2, list.size());
     }
 
     @Test
     public void checksForEmptyList() {
-        LinkedList list = new LinkedList();
+        LinkedList<String> list = new LinkedList<>();
         Assert.assertTrue(list.isEmpty());
-        list.add(1);
+        list.add("a");
         Assert.assertFalse(list.isEmpty());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void throwsWhenRemovingElementOutOfBounds_empty() {
-        LinkedList list = new LinkedList();
-        list.removeAt(0);
+        LinkedList<String> list = new LinkedList<>();
+        list.remove(0);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void throwsWhenRemovingElementOutOfBounds_equalToCount() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        list.add(2);
-        list.removeAt(2);
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.remove(2);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void throwsWhenRemovingElementOutOfBounds_greaterThanCount() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        list.add(2);
-        list.removeAt(5);
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.remove(5);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void throwsWhenRemovingNegativeIndex() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        list.add(2);
-        list.removeAt(-1);
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.remove(-1);
     }
 
     @Test
     public void removesItemsAtIndex() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        assert(list.removeAt(0)).equals(1);
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        assert(list.remove(0)).equals("a");
         Assert.assertTrue(list.isEmpty());
-        list.add(1);
-        list.add(2);
-        assert(list.removeAt(1)).equals(2);
-        assert(list.get(0)).equals(1);
+        list.add("a");
+        list.add("b");
+        assert(list.remove(1)).equals("b");
+        assert(list.get(0)).equals("a");
         Assert.assertEquals(1, list.size());
-        list.add(2);
-        list.add(3);
-        assert(list.removeAt(2)).equals(3);
-        assert(list.get(0)).equals(1);
-        assert(list.get(1)).equals(2);
+        list.add("b");
+        list.add("c");
+        assert(list.remove(2)).equals("c");
+        assert(list.get(0)).equals("a");
+        assert(list.get(1)).equals("b");
         Assert.assertEquals(2, list.size());
-        list.add(3);
-        list.add(4);
-        assert(list.removeAt(2)).equals(3);
-        assert(list.get(0)).equals(1);
-        assert(list.get(1)).equals(2);
-        assert(list.get(2)).equals(4);
+        list.add("c");
+        list.add("d");
+        assert(list.remove(2)).equals("c");
+        assert(list.get(0)).equals("a");
+        assert(list.get(1)).equals("b");
+        assert(list.get(2)).equals("d");
         Assert.assertEquals(3, list.size());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void popThrowsWhenEmpty() {
-        LinkedList list = new LinkedList();
+        LinkedList<String> list = new LinkedList<>();
         list.pop();
     }
 
     @Test
     public void popReturnsFirstElement() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        assert(list.pop()).equals(1);
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        assert(list.pop()).equals("a");
         Assert.assertEquals(0, list.size());
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        assert(list.pop()).equals(1);
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        assert(list.pop()).equals("a");
         Assert.assertEquals(2, list.size());
-        assert(list.pop()).equals(2);
+        assert(list.pop()).equals("b");
         Assert.assertEquals(1, list.size());
-        assert(list.pop()).equals(3);
+        assert(list.pop()).equals("c");
         Assert.assertEquals(0, list.size());
     }
 
     @Test
     public void containsIsFalseForEmptyLists() {
-        LinkedList list = new LinkedList();
+        LinkedList<String> list = new LinkedList<>();
         Assert.assertFalse(list.contains(1));
     }
 
     @Test
     public void containsIsFalseWhenItemIsNotInList() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        Assert.assertFalse(list.contains(4));
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        Assert.assertFalse(list.contains("d"));
     }
 
     @Test
     public void containsIsTrueForListOfSizeOne() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        Assert.assertTrue(list.contains(1));
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        Assert.assertTrue(list.contains("a"));
     }
 
     @Test
     public void containsIsTrueForAnyIndexInList() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.add(4);
-        Assert.assertTrue(list.contains(1));
-        Assert.assertTrue(list.contains(2));
-        Assert.assertTrue(list.contains(3));
-        Assert.assertTrue(list.contains(4));
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.add("d");
+        Assert.assertTrue(list.contains("a"));
+        Assert.assertTrue(list.contains("b"));
+        Assert.assertTrue(list.contains("c"));
+        Assert.assertTrue(list.contains("d"));
     }
 
     @Test
     public void containsIsFalseForNullValues() {
-        LinkedList list = new LinkedList();
+        LinkedList<String> list = new LinkedList<>();
         Assert.assertFalse(list.contains(null));
     }
 
     @Test
     public void containsIsTrueWhenListContainsNull() {
-        LinkedList list = new LinkedList();
+        LinkedList<String> list = new LinkedList<>();
         list.add(null);
         Assert.assertTrue(list.contains(null));
     }
 
     @Test
     public void toArrayWorksWithEmptyList() {
-        LinkedList list = new LinkedList();
+        LinkedList<String> list = new LinkedList<>();
         Assert.assertArrayEquals(new Object[0], list.toArray());
     }
 
     @Test
     public void toArrayWorksWithSingleElementlist() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        Object[] expected = {1};
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        Object[] expected = {"a"};
         Assert.assertArrayEquals(expected, list.toArray());
     }
 
     @Test
     public void toArrayWorksWithManyItems() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.add(4);
-        Object[] expected = {1, 2, 3, 4};
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.add("d");
+        Object[] expected = {"a", "b", "c", "d"};
         Assert.assertArrayEquals(expected, list.toArray());
     }
 
     @Test
     public void toArrayReturnsAnEmptyListWhenGivenAnEmptyArray() {
-        LinkedList<Number> list = new LinkedList();
+        LinkedList<Number> list = new LinkedList<>();
         Number[] expected = {};
         Assert.assertArrayEquals(expected, list.toArray(new Number[0]));
     }
 
     @Test
     public void toArrayReturnsNullValuesWhenLinkedListIsEmpty() {
-        LinkedList list = new LinkedList();
-        Object[] expected = {null, null, null};
-        Assert.assertArrayEquals(expected, list.toArray(new Object[] {1, 2, 3}));
+        LinkedList<String> list = new LinkedList<>();
+        String[] expected = {null, null, null};
+        Assert.assertArrayEquals(expected, list.toArray(new String[] {"a", "b", "d"}));
     }
 
     @Test
     public void toArrayOnlyTakesItemsForTheSizeOfTheArray() {
-        LinkedList list = new LinkedList();
-        for (int item : new int[] {1, 2, 3, 4})
+        LinkedList<String> list = new LinkedList<>();
+        for (String item : new String[] {"a", "b", "c", "d"})
             list.add(item);
-        Object[] expected = {1, 2};
-        Assert.assertArrayEquals(expected, list.toArray(new Object[2]));
+        String[] expected = {"a", "b"};
+        Assert.assertArrayEquals(expected, list.toArray(new String[2]));
     }
 
     @Test
     public void removingFromEmptyListResultsInFalse() {
-        Assert.assertFalse(new LinkedList().remove(1));
+        Number value = 1;
+        Assert.assertFalse(new LinkedList<>().remove(value));
     }
 
     @Test
     public void removingItemNotInListResultsInFalse() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        Assert.assertFalse(list.remove(2));
-        Assert.assertArrayEquals(new Number[] {1}, list.toArray());
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        Assert.assertFalse(list.remove("b"));
+        Assert.assertArrayEquals(new String[] {"a"}, list.toArray());
     }
 
     @Test
     public void removesFirstItemInList() {
-        LinkedList list = new LinkedList();
-        for (int i : new int[] {1, 2, 3})
+        LinkedList<String> list = new LinkedList<>();
+        for (String i : new String[] {"a", "b", "c"})
             list.add(i);
-        Assert.assertTrue(list.remove(1));
-        Assert.assertArrayEquals(new Number[] {2, 3}, list.toArray());
+        Assert.assertTrue(list.remove("a"));
+        Assert.assertArrayEquals(new String[] {"b", "c"}, list.toArray());
     }
 
     @Test
     public void removesNullItemFromList() {
-        LinkedList list = new LinkedList();
+        LinkedList<String> list = new LinkedList<>();
         list.add(null);
         Assert.assertTrue(list.remove(null));
         Assert.assertArrayEquals(new Object[0], list.toArray());
@@ -270,98 +271,99 @@ public class LinkedListTest {
 
     @Test
     public void removesLastItemFromList() {
-        LinkedList list = new LinkedList();
-        for (int i : new int[] {1, 2, 3})
+        LinkedList<String> list = new LinkedList<>();
+        for (String i : new String[] {"a", "b", "c"})
             list.add(i);
-        Assert.assertTrue(list.remove(3));
-        Assert.assertArrayEquals(new Number[]{1, 2}, list.toArray());
+        Assert.assertTrue(list.remove("c"));
+        Assert.assertArrayEquals(new String[] {"a", "b"}, list.toArray());
     }
 
     @Test
     public void removesOnlyTheFirstOccurrenceOfAnItem() {
-        LinkedList list = new LinkedList();
-        for (int i : new int[] {2, 1, 2, 1, 2})
+        LinkedList<String> list = new LinkedList<>();
+        for (String i : new String[] {"b", "a", "b", "a", "b"})
             list.add(i);
-        Assert.assertTrue(list.remove(1));
-        Assert.assertArrayEquals(new Number[] {2, 2, 1, 2}, list.toArray());
+        Assert.assertTrue(list.remove("a"));
+        Assert.assertArrayEquals(new String[] {"b", "b", "a", "b"}, list.toArray());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void throwsWhenAttemptingToSetValuesInEmptyLists() {
-        LinkedList list = new LinkedList();
-        list.set(0, 1);
+        LinkedList<String> list = new LinkedList<>();
+        list.set(0, "a");
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void throwsWhenAttemptingToSetValuesOutOfBounds() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.set(3, 1);
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.set(3, "a");
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void throwsWhenAttemptingToSetNegativeIndices() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.set(3, -1);
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.set(-1, "a");
     }
 
     @Test
     public void setsElementsToNewValues() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        Assert.assertEquals(1, list.set(0, 2));
-        Assert.assertEquals(2, list.get(0));
-        list.add(3);
-        list.add(4);
-        Assert.assertEquals(3, list.set(1, 0));
-        Assert.assertEquals(0, list.get(1));
-        Assert.assertEquals(4, list.set(2, 5));
-        Assert.assertEquals(5, list.get(2));
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        Assert.assertEquals("a", list.set(0, "b"));
+        Assert.assertEquals("b", list.get(0));
+        list.add("c");
+        list.add("d");
+        Assert.assertEquals("c", list.set(1, "z"));
+        Assert.assertEquals("z", list.get(1));
+        Assert.assertEquals("d", list.set(2, "e"));
+        Assert.assertEquals("e", list.get(2));
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void insertThrowsOnEmptyList() {
-        LinkedList list = new LinkedList();
-        list.add(0, 0);
+        LinkedList<String> list = new LinkedList<>();
+        list.add(0, "a");
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void insertThrowsOnNegativeIndex() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        list.add(-1, 0);
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add(-1, "a");
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void insertThrowsOnOutOfRangeIndex() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        list.add(1, 0);
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add(1, "b");
     }
 
     @Test
     public void insertsItemAtZeroIndex() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        list.add(0, 2);
-        Assert.assertEquals(2, list.get(0));
-        Assert.assertEquals(1, list.get(1));
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add(0, "b");
+        Assert.assertEquals("b", list.get(0));
+        Assert.assertEquals("a", list.get(1));
     }
 
     @Test
     public void insertsItemAtAnyIndex() {
-        LinkedList list = new LinkedList();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.add(1, 4);
-        Assert.assertArrayEquals(new Object[] {1, 4, 2, 3}, list.toArray());
-        list.add(3, 5);
-        Assert.assertArrayEquals(new Object[] {1, 4, 2, 5, 3}, list.toArray());
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.add(1, "d");
+        Assert.assertArrayEquals(new Object[] {"a", "d", "b", "c"}, list.toArray());
+        list.add(3, "e");
+        Assert.assertArrayEquals(new Object[] {"a", "d", "b", "e", "c"}, list.toArray());
     }
 }
+

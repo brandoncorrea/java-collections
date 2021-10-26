@@ -1,5 +1,6 @@
 package collections.linkedList;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -10,10 +11,10 @@ public class LinkedList<TValue> {
 
     public boolean add(TValue value) {
         if (first == null)
-            first = new LinkedNode(value);
+            first = new LinkedNode<>(value);
         else {
             LinkedNode<TValue> tail = find(node -> node.next == null);
-            tail.next = new LinkedNode(value);
+            tail.next = new LinkedNode<>(value);
             tail.next.prev = tail;
         }
         size++;
@@ -22,7 +23,7 @@ public class LinkedList<TValue> {
 
     public boolean add(int index, TValue value) {
         LinkedNode<TValue> node = nodeAt(index);
-        LinkedNode newNode = new LinkedNode(value);
+        LinkedNode<TValue> newNode = new LinkedNode<>(value);
         newNode.next = node;
         newNode.prev = node.prev;
         if (node.prev == null)
@@ -45,13 +46,13 @@ public class LinkedList<TValue> {
         return removeNode(findNodeWithValue(value));
     }
 
-    public TValue removeAt(int index) {
+    public TValue remove(int index) {
         LinkedNode<TValue> node = nodeAt(index);
         removeNode(node);
         return node.value;
     }
 
-    public TValue pop() { return removeAt(0); }
+    public TValue pop() { return remove(0); }
     public TValue get(int index) { return nodeAt(index).value; }
     public int size() { return size; }
     public boolean isEmpty() { return size == 0; }
@@ -100,7 +101,7 @@ public class LinkedList<TValue> {
     }
 
     private LinkedNode<TValue> findNodeWithValue(Object value) {
-        return find(node -> valuesEqual(node.value, value));
+        return find(node -> Objects.equals(node.value, value));
     }
 
     private LinkedNode<TValue> find(Function<LinkedNode<TValue>, Boolean> predicate) {
@@ -113,9 +114,5 @@ public class LinkedList<TValue> {
     private void forEach(Consumer<LinkedNode<TValue>> action) {
         for (LinkedNode<TValue> node = first; node != null; node = node.next)
             action.accept(node);
-    }
-
-    private boolean valuesEqual(Object a, Object b) {
-        return a == null && b == null || a.equals(b);
     }
 }
