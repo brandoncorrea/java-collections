@@ -497,29 +497,15 @@ public class LinkedListTest {
     }
 
     @Test
-    public void createsNewIterator() {
+    public void createsLinkedListIterator() {
         LinkedList<String> list = new LinkedList<>();
-        List<String> expected = new Vector<>();
-        Assert.assertEquals(expected.iterator().hasNext(), list.iterator().hasNext());
-        for (String value : new String[] {"a", "b", "c"}) {
-            list.add(value);
-            expected.add(value);
-        }
-
-        Iterator<String> listIterator = list.iterator();
-        Iterator<String> vectorIterator = expected.iterator();
-        Assert.assertEquals(listIterator.hasNext(), vectorIterator.hasNext());
-        Assert.assertEquals(listIterator.next(), vectorIterator.next());
-        Assert.assertEquals(listIterator.hasNext(), vectorIterator.hasNext());
-        Assert.assertEquals(listIterator.next(), vectorIterator.next());
-        Assert.assertEquals(listIterator.hasNext(), vectorIterator.hasNext());
-        Assert.assertEquals(listIterator.next(), vectorIterator.next());
-        Assert.assertEquals(listIterator.hasNext(), vectorIterator.hasNext());
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void iteratorThrowsOnNextForEmptyList() {
-        LinkedList<String> list = new LinkedList<>();
-        list.iterator().next();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        Iterator<String> iterator = list.iterator();
+        Assert.assertEquals(iterator.getClass(), new LinkedListIterator<String>().getClass());
+        Assert.assertEquals("a", iterator.next());
+        Assert.assertEquals("b", iterator.next());
+        Assert.assertEquals("c", iterator.next());
     }
 }

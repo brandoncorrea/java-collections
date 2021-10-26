@@ -7,6 +7,7 @@ public class LinkedListIterator<TValue> implements Iterator<TValue> {
 
     private LinkedNode<TValue> currentNode;
 
+    public LinkedListIterator() { }
     public LinkedListIterator(LinkedNode<TValue> node) {
         currentNode = node;
     }
