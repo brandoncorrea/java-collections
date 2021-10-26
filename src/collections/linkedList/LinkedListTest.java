@@ -4,7 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.sql.Array;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Vector;
 
 public class LinkedListTest {
@@ -492,5 +494,32 @@ public class LinkedListTest {
         LinkedList<String> list = new LinkedList<>();
         String[] array = new String[0];
         Assert.assertFalse(list.equals(array));
+    }
+
+    @Test
+    public void createsNewIterator() {
+        LinkedList<String> list = new LinkedList<>();
+        List<String> expected = new Vector<>();
+        Assert.assertEquals(expected.iterator().hasNext(), list.iterator().hasNext());
+        for (String value : new String[] {"a", "b", "c"}) {
+            list.add(value);
+            expected.add(value);
+        }
+
+        Iterator<String> listIterator = list.iterator();
+        Iterator<String> vectorIterator = expected.iterator();
+        Assert.assertEquals(listIterator.hasNext(), vectorIterator.hasNext());
+        Assert.assertEquals(listIterator.next(), vectorIterator.next());
+        Assert.assertEquals(listIterator.hasNext(), vectorIterator.hasNext());
+        Assert.assertEquals(listIterator.next(), vectorIterator.next());
+        Assert.assertEquals(listIterator.hasNext(), vectorIterator.hasNext());
+        Assert.assertEquals(listIterator.next(), vectorIterator.next());
+        Assert.assertEquals(listIterator.hasNext(), vectorIterator.hasNext());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void iteratorThrowsOnNextForEmptyList() {
+        LinkedList<String> list = new LinkedList<>();
+        list.iterator().next();
     }
 }

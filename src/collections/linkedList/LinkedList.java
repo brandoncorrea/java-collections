@@ -1,5 +1,6 @@
 package collections.linkedList;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -67,10 +68,14 @@ public class LinkedList<TValue> {
         return findNodeWithValue(value) != null;
     }
 
+    public Iterator<TValue> iterator() {
+        return new LinkedListIterator<>(first);
+    }
+
     public Object[] toArray() {
         Object[] list = new Object[size];
         AtomicInteger index = new AtomicInteger(0);
-        forEach(node -> list[index.getAndIncrement()] = node.value);
+        forEachNode(node -> list[index.getAndIncrement()] = node.value);
         return list;
     }
 
@@ -98,7 +103,7 @@ public class LinkedList<TValue> {
     public int lastIndexOf(Object value) {
         AtomicInteger index = new AtomicInteger(-1);
         AtomicInteger lastIndex = new AtomicInteger(-1);
-        forEach(node -> {
+        forEachNode(node -> {
             index.getAndIncrement();
             if (Objects.equals(node.value, value))
                 lastIndex.set(index.get());
@@ -108,7 +113,7 @@ public class LinkedList<TValue> {
 
     public int hashCode() {
         AtomicInteger hash = new AtomicInteger(1);
-        forEach(node -> {
+        forEachNode(node -> {
             int nodeHash = node == null || node.value == null ? 0 : node.value.hashCode();
             hash.set(31 * hash.get() + nodeHash);
         });
@@ -160,7 +165,7 @@ public class LinkedList<TValue> {
         return null;
     }
 
-    private void forEach(Consumer<LinkedNode<TValue>> action) {
+    private void forEachNode(Consumer<LinkedNode<TValue>> action) {
         for (LinkedNode<TValue> node = first; node != null; node = node.next)
             action.accept(node);
     }
