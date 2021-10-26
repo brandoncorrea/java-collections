@@ -104,6 +104,15 @@ public class LinkedList<TValue> {
         return lastIndex.get();
     }
 
+    public int hashCode() {
+        AtomicInteger hash = new AtomicInteger(1);
+        forEach(node -> {
+            int nodeHash = node == null || node.value == null ? 0 : node.value.hashCode();
+            hash.set(31 * hash.get() + nodeHash);
+        });
+        return hash.get();
+    }
+
     private boolean removeNode(LinkedNode<TValue> node) {
         if (node == null) return false;
         if (node.prev == null) {

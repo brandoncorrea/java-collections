@@ -423,4 +423,17 @@ public class LinkedListTest {
         list.add("a");
         Assert.assertEquals(2, list.lastIndexOf("a"));
     }
+
+    @Test
+    public void listCalculatesHashCode() {
+        // Increases by powers of 31, per the interface definition of the hashCode
+        LinkedList<String> list = new LinkedList<>();
+        Assert.assertEquals(1, list.hashCode());
+        list.add("a");
+        Assert.assertTrue(31 < list.hashCode());
+        list.add("b");
+        Assert.assertTrue(31 * 31 < list.hashCode());
+        list.add("c");
+        Assert.assertTrue(31 * 31 * 31 < list.hashCode());
+    }
 }
