@@ -1,9 +1,5 @@
 package collections.linkedList;
 
-import com.sun.tools.javac.code.Attribute;
-
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
