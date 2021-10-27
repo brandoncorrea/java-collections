@@ -84,6 +84,12 @@ public class LinkedList<TValue> implements Collection<TValue> {
         return new LinkedIterator<>(first);
     }
 
+    public Iterator<TValue> iterator(int index) {
+        Iterator<TValue> iterator = iterator();
+        while (index-- > 0) iterator.next();
+        return iterator;
+    }
+
     public Object[] toArray() {
         Object[] list = new Object[size];
         int index = 0;
@@ -123,6 +129,10 @@ public class LinkedList<TValue> implements Collection<TValue> {
 
     public ListIterator<TValue> listIterator() {
         return new LinkedListIterator<>(first);
+    }
+
+    public ListIterator<TValue> listIterator(int index) {
+        return null;
     }
 
     public int hashCode() {

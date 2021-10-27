@@ -553,4 +553,24 @@ public class LinkedListTest {
         list.add("a");
         list.addAll(0, new Vector<>());
     }
+
+    @Test
+    public void createsListIteratorAtIndex() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        Iterator<String> iterator = list.iterator(0);
+        Assert.assertEquals("a", iterator.next());
+        Assert.assertEquals("b", iterator.next());
+        Assert.assertEquals("c", iterator.next());
+        Assert.assertFalse(iterator.hasNext());
+        iterator = list.iterator(1);
+        Assert.assertEquals("b", iterator.next());
+        Assert.assertEquals("c", iterator.next());
+        Assert.assertFalse(iterator.hasNext());
+        iterator = list.iterator(2);
+        Assert.assertEquals("c", iterator.next());
+        Assert.assertFalse(iterator.hasNext());
+    }
 }
