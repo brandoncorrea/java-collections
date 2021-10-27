@@ -2,10 +2,9 @@ package collections.linkedList;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class LinkedList<TValue> {
+public class LinkedList<TValue> implements Iterable<TValue> {
 
     private LinkedNode<TValue> first;
     private int size = 0;
@@ -13,25 +12,17 @@ public class LinkedList<TValue> {
     public boolean add(TValue value) {
         if (first == null)
             first = new LinkedNode<>(value);
-        else {
-            LinkedNode<TValue> tail = find(node -> node.next == null);
-            tail.next = new LinkedNode<>(value);
-            tail.next.prev = tail;
-        }
+        else
+            find(node -> node.next == null).addAfter(value);
         size++;
         return true;
     }
 
     public void add(int index, TValue value) {
         LinkedNode<TValue> node = nodeAt(index);
-        LinkedNode<TValue> newNode = new LinkedNode<>(value);
-        newNode.next = node;
-        newNode.prev = node.prev;
-        if (node.prev == null)
-            first = newNode;
-        else
-            node.prev.next = newNode;
-        node.prev = newNode;
+        node.addBefore(value);
+        if (node.prev.prev == null)
+            first = node.prev;
         size++;
     }
 
@@ -72,8 +63,8 @@ public class LinkedList<TValue> {
 
     public Object[] toArray() {
         Object[] list = new Object[size];
-        AtomicInteger index = new AtomicInteger(0);
-        forEachNode(node -> list[index.getAndIncrement()] = node.value);
+        int index = 0;
+        for (TValue el : this) list[index++] = el;
         return list;
     }
 
@@ -81,32 +72,30 @@ public class LinkedList<TValue> {
         if (source.length <= size)
             return (T[])toArray();
         int index = 0;
-        for (LinkedNode<TValue> cur = first;
-             cur != null && index < source.length;
-             cur = cur.next)
-            source[index++] = (T)cur.value;
+        for (TValue el : this) source[index++] = (T)el;
         source[index] = null;
         return source;
     }
 
     public int indexOf(Object value) {
-        AtomicInteger index = new AtomicInteger(-1);
-        LinkedNode<TValue> found = find(node -> {
-            index.getAndIncrement();
-            return Objects.equals(node.value, value);
-        });
-        return found == null ? -1 : index.get();
+        int index = 0;
+        for (TValue el : this) {
+            if (Objects.equals(el, value))
+                return index;
+            index++;
+        }
+        return -1;
     }
 
     public int lastIndexOf(Object value) {
-        AtomicInteger index = new AtomicInteger(-1);
-        AtomicInteger lastIndex = new AtomicInteger(-1);
-        forEachNode(node -> {
-            index.getAndIncrement();
-            if (Objects.equals(node.value, value))
-                lastIndex.set(index.get());
-        });
-        return lastIndex.get();
+        int index = -1;
+        int lastIndex = -1;
+        for (TValue el : this) {
+            index++;
+            if (Objects.equals(el, value))
+                lastIndex = index;
+        }
+        return lastIndex;
     }
 
     public ListIterator<TValue> listIterator() {
@@ -114,24 +103,19 @@ public class LinkedList<TValue> {
     }
 
     public int hashCode() {
-        AtomicInteger hash = new AtomicInteger(1);
-        forEachNode(node -> {
-            int nodeHash = node == null || node.value == null ? 0 : node.value.hashCode();
-            hash.set(31 * hash.get() + nodeHash);
-        });
-        return hash.get();
+        int hash = 1;
+        for (TValue el : this)
+            hash = 31 * hash + Objects.hashCode(el);
+        return hash;
     }
 
     public boolean equals(Object list) {
         if (!(list instanceof List) || ((List<?>) list).size() != size)
             return false;
-
-        LinkedNode<TValue> cur = first;
-        for (Object value : (List<?>)list) {
-            if (!Objects.equals(value, cur.value))
+        Iterator<TValue> iterator = iterator();
+        for (Object value : (List<?>)list)
+            if (!Objects.equals(value, iterator.next()))
                 return false;
-            cur = cur.next;
-        }
         return true;
     }
 
@@ -141,8 +125,7 @@ public class LinkedList<TValue> {
             first = node.next;
             if (first != null)
                 first.prev = null;
-        }
-        else
+        } else
             node.prev.next = node.next;
         size--;
         return true;
@@ -165,10 +148,5 @@ public class LinkedList<TValue> {
             if (predicate.apply(node))
                 return node;
         return null;
-    }
-
-    private void forEachNode(Consumer<LinkedNode<TValue>> action) {
-        for (LinkedNode<TValue> node = first; node != null; node = node.next)
-            action.accept(node);
     }
 }
