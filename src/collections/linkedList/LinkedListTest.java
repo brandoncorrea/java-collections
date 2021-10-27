@@ -560,17 +560,95 @@ public class LinkedListTest {
         list.add("a");
         list.add("b");
         list.add("c");
-        Iterator<String> iterator = list.iterator(0);
+
+        ListIterator<String> iterator = list.listIterator(0);
+        Assert.assertFalse(iterator.hasPrevious());
         Assert.assertEquals("a", iterator.next());
         Assert.assertEquals("b", iterator.next());
         Assert.assertEquals("c", iterator.next());
         Assert.assertFalse(iterator.hasNext());
-        iterator = list.iterator(1);
+
+        iterator = list.listIterator(1);
+        Assert.assertTrue(iterator.hasPrevious());
         Assert.assertEquals("b", iterator.next());
         Assert.assertEquals("c", iterator.next());
         Assert.assertFalse(iterator.hasNext());
-        iterator = list.iterator(2);
+        Assert.assertEquals("c", iterator.previous());
+        Assert.assertEquals("b", iterator.previous());
+        Assert.assertEquals("a", iterator.previous());
+        Assert.assertFalse(iterator.hasPrevious());
+
+        iterator = list.listIterator(2);
         Assert.assertEquals("c", iterator.next());
         Assert.assertFalse(iterator.hasNext());
+        Assert.assertEquals("c", iterator.previous());
+        Assert.assertEquals("b", iterator.previous());
+        Assert.assertEquals("a", iterator.previous());
+        Assert.assertFalse(iterator.hasPrevious());
+
+        iterator = list.listIterator(3);
+        Assert.assertFalse(iterator.hasNext());
+        Assert.assertEquals("c", iterator.previous());
+        Assert.assertEquals("b", iterator.previous());
+        Assert.assertEquals("a", iterator.previous());
+        Assert.assertFalse(iterator.hasPrevious());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void listIteratorThrowsOnNegativeIndex() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.listIterator(-1);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void listIteratorThrowsOnOutOfRangeIndex() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.listIterator(4);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subListThrowsWithNegativeFromIndex() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.subList(-1, 1);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subListThrowsWithOutOfBoundsIndex() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.subList(1, 5);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subListThrowsWhenIndicesCrossOver() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.subList(1, 0);
+    }
+
+    @Test
+    public void subListCreatesNewLists() {
+        String[] items = {"a", "b", "c"};
+        LinkedList<String> list = new LinkedList<>();
+        for (String item : items)
+            list.add(item);
+        Assert.assertArrayEquals(items, list.subList(0, 3).toArray());
+        Assert.assertArrayEquals(new String[] {"a", "b"}, list.subList(0, 2).toArray());
+        Assert.assertArrayEquals(new String[] {}, list.subList(0, 0).toArray());
+        Assert.assertArrayEquals(new String[] {"b", "c"}, list.subList(1, 3).toArray());
+        Assert.assertArrayEquals(new String[] {"c"}, list.subList(2, 3).toArray());
     }
 }

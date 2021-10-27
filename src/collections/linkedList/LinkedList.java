@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
-public class LinkedList<TValue> implements Collection<TValue> {
+public class LinkedList<TValue> implements List<TValue> {
 
     private LinkedNode<TValue> first;
     private int size = 0;
@@ -84,12 +84,6 @@ public class LinkedList<TValue> implements Collection<TValue> {
         return new LinkedIterator<>(first);
     }
 
-    public Iterator<TValue> iterator(int index) {
-        Iterator<TValue> iterator = iterator();
-        while (index-- > 0) iterator.next();
-        return iterator;
-    }
-
     public Object[] toArray() {
         Object[] list = new Object[size];
         int index = 0;
@@ -132,7 +126,20 @@ public class LinkedList<TValue> implements Collection<TValue> {
     }
 
     public ListIterator<TValue> listIterator(int index) {
-        return null;
+        if (index < 0 || index > size)
+            throw new IndexOutOfBoundsException();
+        ListIterator<TValue> iterator = listIterator();
+        while (index-- > 0) iterator.next();
+        return iterator;
+    }
+
+    public List<TValue> subList(int fromIndex, int toIndex) {
+        if (toIndex > size || fromIndex > toIndex)
+            throw new IndexOutOfBoundsException();
+        Iterator<TValue> iterator = listIterator(fromIndex);
+        LinkedList<TValue> list = new LinkedList<>();
+        while (toIndex-- > fromIndex) list.add(iterator.next());
+        return list;
     }
 
     public int hashCode() {
