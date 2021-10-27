@@ -531,4 +531,26 @@ public class LinkedListTest {
         list.add("a");
         Assert.assertFalse(list.containsAll(items));
     }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void addAllThrowsUnsupported() {
+        new LinkedList<String>().addAll(new Vector<>());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeAllThrowsUnsupported() {
+        new LinkedList<String>().removeAll(new Vector<>());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void retainAllThrowsUnsupported() {
+        new LinkedList<String>().retainAll(new Vector<>());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void addAllAtIndexThrowsUnsupported() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("a");
+        list.addAll(0, new Vector<>());
+    }
 }

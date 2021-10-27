@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
-public class LinkedList<TValue> implements Iterable<TValue> {
+public class LinkedList<TValue> implements Collection<TValue> {
 
     private LinkedNode<TValue> first;
     private int size = 0;
@@ -62,6 +62,22 @@ public class LinkedList<TValue> implements Iterable<TValue> {
             if (!contains(el))
                 return false;
         return true;
+    }
+
+    public boolean addAll(Collection<? extends TValue> c) {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean addAll(int index, Collection<? extends TValue> c) {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean removeAll(Collection<?> c) {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean retainAll(Collection<?> c) {
+        throw new UnsupportedOperationException();
     }
 
     public Iterator<TValue> iterator() {
