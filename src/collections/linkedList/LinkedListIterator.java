@@ -87,16 +87,13 @@ public class LinkedListIterator<TValue> implements ListIterator<TValue> {
     }
 
     public void add(TValue value) {
+        LinkedNode<TValue> newNode = new LinkedNode<>(value);
+        newNode.next = next;
+        newNode.prev = prev;
+        if (next != null) next.prev = newNode;
+        if (prev != null) prev.next = newNode;
+        prev = newNode;
         index++;
-        if (prev != null) {
-            prev.addAfter(value);
-            prev = prev.next;
-        } else
-            prev = new LinkedNode<>(value);
-
-        if (next != null)
-            next.prev = prev;
-        prev.next = next;
         lastNextRealized = null;
         lastPrevRealized = null;
     }
