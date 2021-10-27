@@ -3,10 +3,7 @@ package collections.linkedList;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Vector;
+import java.util.*;
 
 public class LinkedListTest {
     @Test
@@ -492,7 +489,7 @@ public class LinkedListTest {
     public void equalsFalseIfObjectIsNotList() {
         LinkedList<String> list = new LinkedList<>();
         String[] array = new String[0];
-        Assert.assertFalse(list.equals(array));
+        Assert.assertNotEquals(list, array);
     }
 
     @Test
@@ -502,7 +499,7 @@ public class LinkedListTest {
         list.add("b");
         list.add("c");
         Iterator<String> iterator = list.iterator();
-        Assert.assertEquals(iterator.getClass(), new LinkedIterator<String>().getClass());
+        Assert.assertEquals(iterator.getClass(), LinkedIterator.class);
         Assert.assertEquals("a", iterator.next());
         Assert.assertEquals("b", iterator.next());
         Assert.assertEquals("c", iterator.next());
@@ -515,7 +512,7 @@ public class LinkedListTest {
         list.add("b");
         list.add("c");
         ListIterator<String> iterator = list.listIterator();
-        Assert.assertEquals(iterator.getClass(), new LinkedListIterator<String>().getClass());
+        Assert.assertEquals(iterator.getClass(), LinkedListIterator.class);
         Assert.assertEquals("a", iterator.next());
         Assert.assertEquals("b", iterator.next());
         Assert.assertEquals("c", iterator.next());

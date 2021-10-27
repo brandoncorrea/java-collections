@@ -1,9 +1,6 @@
 package collections.linkedList;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -113,7 +110,7 @@ public class LinkedList<TValue> {
     }
 
     public ListIterator<TValue> listIterator() {
-        return new LinkedListIterator(first);
+        return new LinkedListIterator<>(first);
     }
 
     public int hashCode() {
