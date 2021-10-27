@@ -517,4 +517,18 @@ public class LinkedListTest {
         Assert.assertEquals("b", iterator.next());
         Assert.assertEquals("c", iterator.next());
     }
+
+    @Test
+    public void checksForMultipleElementExistence() {
+        LinkedList<String> list = new LinkedList<>();
+        Collection<String> items = new Vector<>();
+        Assert.assertTrue(list.containsAll(items));
+        items.add("a");
+        Assert.assertFalse(list.containsAll(items));
+        list.add("b");
+        Assert.assertFalse(list.containsAll(items));
+        items.add("c");
+        list.add("a");
+        Assert.assertFalse(list.containsAll(items));
+    }
 }

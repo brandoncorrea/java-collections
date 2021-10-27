@@ -57,6 +57,13 @@ public class LinkedList<TValue> implements Iterable<TValue> {
         return findNodeWithValue(value) != null;
     }
 
+    public boolean containsAll(Collection<?> items) {
+        for (Object el : items)
+            if (!contains(el))
+                return false;
+        return true;
+    }
+
     public Iterator<TValue> iterator() {
         return new LinkedIterator<>(first);
     }
