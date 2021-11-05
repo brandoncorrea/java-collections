@@ -651,4 +651,58 @@ public class LinkedListTest {
         Assert.assertArrayEquals(new String[] {"b", "c"}, list.subList(1, 3).toArray());
         Assert.assertArrayEquals(new String[] {"c"}, list.subList(2, 3).toArray());
     }
+
+    @Test
+    public void bubbleSortSortsToIdentity() {
+        LinkedList<Integer> list = new LinkedList<>();
+        list.bubbleSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {}, list.toArray());
+
+        list.add(1);
+        list.bubbleSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {1}, list.toArray());
+
+        list.add(2);
+        list.bubbleSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {1, 2}, list.toArray());
+
+        list.add(3);
+        list.bubbleSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {1, 2, 3}, list.toArray());
+    }
+
+    @Test
+    public void bubbleSortSwapsTwoItems() {
+        LinkedList<Integer> list = new LinkedList<>();
+        list.add(2);
+        list.add(1);
+        list.bubbleSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {1, 2}, list.toArray());
+    }
+
+    @Test
+    public void bubbleSortWorksOnThreeItems() {
+        LinkedList<Integer> list = new LinkedList<>();
+        list.add(2);
+        list.add(3);
+        list.add(1);
+        list.bubbleSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {1, 2, 3}, list.toArray());
+    }
+
+    @Test
+    public void bubbleSortSortsOneThousandRandomNumbers() {
+        LinkedList<Integer> list = new LinkedList<>();
+        Random randomNumbers = new Random();
+        for(int i = 0; i < 1000; i++)
+            list.add(randomNumbers.nextInt(100));
+        list.bubbleSort(Integer::compare);
+
+        Integer previousValue = Integer.MIN_VALUE;
+        for(Integer value : list)
+            if (value < previousValue)
+                Assert.fail();
+            else
+                previousValue = value;
+    }
 }

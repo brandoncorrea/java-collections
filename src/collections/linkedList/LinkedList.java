@@ -1,7 +1,10 @@
 package collections.linkedList;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class LinkedList<TValue> implements List<TValue> {
@@ -159,6 +162,23 @@ public class LinkedList<TValue> implements List<TValue> {
         return true;
     }
 
+    public void bubbleSort(BiFunction<TValue, TValue, Integer> comparer) {
+        AtomicBoolean hasSwapped = new AtomicBoolean(true);
+        while (hasSwapped.getAndSet(false))
+            forEachNode(node -> {
+                if (node.next != null && comparer.apply(node.value, node.next.value) == 1) {
+                    swapValues(node, node.next);
+                    hasSwapped.set(true);
+                }
+            });
+    }
+
+    private void swapValues(LinkedNode<TValue> a, LinkedNode<TValue> b) {
+        TValue temp = a.value;
+        a.value = b.value;
+        b.value = temp;
+    }
+
     private boolean removeNode(LinkedNode<TValue> node) {
         if (node == null) return false;
         if (node.prev == null) {
@@ -181,6 +201,11 @@ public class LinkedList<TValue> implements List<TValue> {
 
     private LinkedNode<TValue> findNodeWithValue(Object value) {
         return find(node -> Objects.equals(node.value, value));
+    }
+
+    private void forEachNode(Consumer<LinkedNode<TValue>> func) {
+        for (LinkedNode<TValue> node = first; node != null; node = node.next)
+            func.accept(node);
     }
 
     private LinkedNode<TValue> find(Function<LinkedNode<TValue>, Boolean> predicate) {
