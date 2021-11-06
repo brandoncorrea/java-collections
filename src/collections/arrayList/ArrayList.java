@@ -1,8 +1,6 @@
 package collections.arrayList;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 public class ArrayList<T> implements Collection<T> {
 
@@ -60,6 +58,14 @@ public class ArrayList<T> implements Collection<T> {
         return true;
     }
 
+    public void add(int index, T value) {
+        throw new UnsupportedOperationException();
+    }
+
+    public T remove(int index) {
+        throw new UnsupportedOperationException();
+    }
+
     public boolean remove(Object value) {
         throw new UnsupportedOperationException();
     }
@@ -75,6 +81,10 @@ public class ArrayList<T> implements Collection<T> {
         throw new UnsupportedOperationException();
     }
 
+    public boolean addAll(int index, Collection<? extends T> c) {
+        throw new UnsupportedOperationException();
+    }
+
     public boolean removeAll(Collection<?> items) {
         throw new UnsupportedOperationException();
     }
@@ -85,6 +95,16 @@ public class ArrayList<T> implements Collection<T> {
 
     public void clear() {
         size = 0;
+    }
+
+    public T get(int index) {
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException();
+        return values[index];
+    }
+
+    public T set(int index, T element) {
+        throw new UnsupportedOperationException();
     }
 
     private void grow() {
@@ -103,5 +123,20 @@ public class ArrayList<T> implements Collection<T> {
 
     private void copyTo(T[] source, T[] destination) {
         System.arraycopy(source, 0, destination, 0, source.length);
+    }
+
+    public int indexOf(Object item) {
+        for(int i = 0; i < size; i++)
+            if (Objects.equals(values[i], item))
+                return i;
+        return -1;
+    }
+
+    public int lastIndexOf(Object item) {
+        int lastIndex = -1;
+        for (int i = 0; i < size; i++)
+            if (Objects.equals(values[i], item))
+                lastIndex = i;
+        return lastIndex;
     }
 }
