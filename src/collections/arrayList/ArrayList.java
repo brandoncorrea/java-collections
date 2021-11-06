@@ -2,7 +2,7 @@ package collections.arrayList;
 
 import java.util.*;
 
-public class ArrayList<T> implements Collection<T> {
+public class ArrayList<T> implements List<T> {
 
     private T[] values;
     private int size = 0;
@@ -37,6 +37,25 @@ public class ArrayList<T> implements Collection<T> {
 
     public Iterator<T> iterator() {
         return new ArrayIterator<>((T[])toArray());
+    }
+
+    public ListIterator<T> listIterator() {
+        return listIterator(0);
+    }
+
+    public ListIterator<T> listIterator(int index) {
+        if (index < 0 || index > size)
+            throw new IndexOutOfBoundsException();
+        return new ArrayListIterator<>((T[])toArray(), index);
+    }
+
+    public List<T> subList(int fromIndex, int toIndex) {
+        if (fromIndex < 0 || toIndex > size || fromIndex > toIndex)
+            throw new IndexOutOfBoundsException();
+        List<T> list = new ArrayList<>();
+        while (fromIndex < toIndex)
+            list.add(values[fromIndex++]);
+        return list;
     }
 
     public Object[] toArray() {

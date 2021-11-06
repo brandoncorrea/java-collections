@@ -3,8 +3,8 @@ package collections.arrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.sql.Array;
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Vector;
 
 public class ArrayListTest {
@@ -230,5 +230,78 @@ public class ArrayListTest {
         Assert.assertEquals(2, list.lastIndexOf(1));
         list.add(2);
         Assert.assertEquals(3, list.lastIndexOf(2));
+    }
+
+    @Test
+    public void createsListIterator() {
+        ArrayList<Integer> list = new ArrayList<>(new Integer[] {1, 2, 3});
+        ListIterator<Integer> iterator = list.listIterator();
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertFalse(iterator.hasPrevious());
+        Assert.assertEquals(1, (int)iterator.next());
+        Assert.assertEquals(2, (int)iterator.next());
+        Assert.assertEquals(3, (int)iterator.next());
+        Assert.assertFalse(iterator.hasNext());
+        Assert.assertTrue(iterator.hasPrevious());
+    }
+
+    @Test
+    public void createsListIteratorAtIndex() {
+        ArrayList<Integer> list = new ArrayList<>(new Integer[] {1, 2, 3});
+        ListIterator<Integer> iterator = list.listIterator(1);
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertTrue(iterator.hasPrevious());
+        Assert.assertEquals(1, (int)iterator.previous());
+        Assert.assertFalse(iterator.hasPrevious());
+        Assert.assertEquals(1, (int)iterator.next());
+        Assert.assertEquals(2, (int)iterator.next());
+        Assert.assertEquals(3, (int)iterator.next());
+        Assert.assertFalse(iterator.hasNext());
+        Assert.assertTrue(iterator.hasPrevious());
+
+        iterator = list.listIterator(0);
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertFalse(iterator.hasPrevious());
+
+        iterator = list.listIterator(3);
+        Assert.assertFalse(iterator.hasNext());
+        Assert.assertTrue(iterator.hasPrevious());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void indexedListIteratorThrowsWhenNegative() {
+        ArrayList<Integer> list = new ArrayList<>(new Integer[] {1, 2, 3});
+        list.listIterator(-1);
+    }
+
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void indexedListIteratorThrowsWhenOutOfBounds() {
+        ArrayList<Integer> list = new ArrayList<>(new Integer[] {1, 2, 3});
+        list.listIterator(4);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subListThrowsWhenFromIndexIsNegative() {
+        new ArrayList<>(new Integer[]{1, 2, 3}).subList(-1, 1);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subListThrowsWhenToIndexIsGreaterThanSize() {
+        new ArrayList<>(new Integer[]{1, 2, 3}).subList(0, 4);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subListThrowsWhenIndicesCross() {
+        new ArrayList<>(new Integer[]{1, 2, 3}).subList(1, 0);
+    }
+
+    @Test
+    public void subListCreatesNewList() {
+        ArrayList<Integer> list = new ArrayList<>(new Integer[] {1, 2, 3});
+        Assert.assertArrayEquals(new Integer[] {1, 2, 3}, list.subList(0, 3).toArray());
+        Assert.assertArrayEquals(new Integer[] {1, 2}, list.subList(0, 2).toArray());
+        Assert.assertArrayEquals(new Integer[] {2, 3}, list.subList(1, 3).toArray());
+        Assert.assertArrayEquals(new Integer[0], list.subList(1, 1).toArray());
     }
 }
