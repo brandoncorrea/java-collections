@@ -14,6 +14,18 @@ public class ArrayListIteratorTest {
         Assert.assertFalse(iterator.hasPrevious());
         Assert.assertEquals(0, iterator.nextIndex());
         Assert.assertEquals(-1, iterator.previousIndex());
+
+        iterator = new ArrayListIterator<>(new Integer[] {1, 2, 3});
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertFalse(iterator.hasPrevious());
+        Assert.assertEquals(0, iterator.nextIndex());
+        Assert.assertEquals(-1, iterator.previousIndex());
+
+        iterator = new ArrayListIterator<>(new Integer[] {1, 2, 3}, 1);
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertTrue(iterator.hasPrevious());
+        Assert.assertEquals(1, iterator.nextIndex());
+        Assert.assertEquals(0, iterator.previousIndex());
     }
 
     @Test

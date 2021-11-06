@@ -15,6 +15,11 @@ public class ArrayListIterator<T> implements ListIterator<T> {
         this.values = values;
     }
 
+    public ArrayListIterator(T[] values, int nextIndex) {
+        this.values = values;
+        index = nextIndex;
+    }
+
     public boolean hasNext() {
         return index < values.length;
     }
