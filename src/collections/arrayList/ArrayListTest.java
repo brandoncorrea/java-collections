@@ -77,40 +77,123 @@ public class ArrayListTest {
         Assert.assertEquals(0, list.size());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void removeElementThrowsUnsupported() {
+    @Test
+    public void removesElementsFromList() {
         ArrayList<String> list = new ArrayList<>();
-        Boolean __ = list.remove("a");
+        Assert.assertFalse(list.remove("a"));
+        list.add("a");
+        Assert.assertTrue(list.remove("a"));
+        Assert.assertArrayEquals(new String[0], list.toArray());
+        Assert.assertFalse(list.remove("a"));
+        list.add("a");
+        list.add("b");
+        Assert.assertTrue(list.remove("b"));
+        Assert.assertArrayEquals(new String[] {"a"}, list.toArray());
+        list.add("b");
+        list.add("c");
+        Assert.assertTrue(list.remove("b"));
+        Assert.assertArrayEquals(new String[] {"a", "c"}, list.toArray());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void removeIndexThrowsUnsupported() {
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void throwsWhenRemovingIndexOfEmptyList() {
         ArrayList<String> list = new ArrayList<>();
-        String __ = list.remove(1);
+        list.remove(0);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void removeAllThrowsUnsupported() {
-        ArrayList<Integer> list = new ArrayList<>();
-        Boolean __ = list.removeAll(new Vector<Integer>());
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void throwsWhenRemovingNegativeIndex() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.remove(-1);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void addAllThrowsUnsupported() {
-        ArrayList<Integer> list = new ArrayList<>();
-        Boolean __ = list.addAll(new Vector<>());
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void throwsWhenRemovingOutOfBoundsIndex() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.remove(3);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void retainAllThrowsUnsupported() {
+    @Test
+    public void removesItemAtSpecifiedIndex() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("a");
+        Assert.assertEquals("a", list.remove(0));
+        Assert.assertArrayEquals(new String[0], list.toArray());
+        list.add("a");
+        list.add("b");
+        Assert.assertEquals("a", list.remove(0));
+        Assert.assertArrayEquals(new String[] {"b"}, list.toArray());
+        list.clear();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        Assert.assertEquals("b", list.remove(1));
+        Assert.assertArrayEquals(new String[] {"a", "c"}, list.toArray());
+    }
+
+    @Test
+    public void removesAllElementsInSpecifiedCollection() {
         ArrayList<Integer> list = new ArrayList<>();
-        Boolean __ = list.retainAll(new Vector<Integer>());
+        Vector<Integer> vector = new Vector<>();
+        Assert.assertFalse(list.removeAll(vector));
+        list.add(1);
+        Assert.assertFalse(list.removeAll(vector));
+        Assert.assertArrayEquals(new Integer[] {1}, list.toArray());
+        vector.add(1);
+        Assert.assertTrue(list.removeAll(vector));
+        Assert.assertArrayEquals(new Integer[0], list.toArray());
+        vector.add(2);
+        list.add(1);
+        list.add(1);
+        list.add(2);
+        list.add(2);
+        list.add(3);
+        Assert.assertTrue(list.removeAll(vector));
+        Assert.assertArrayEquals(new Integer[] {3}, list.toArray());
+    }
+
+    @Test
+    public void addsAllItemsInCollectionToArray() {
+        ArrayList<Integer> list = new ArrayList<>();
+        Vector<Integer> vector = new Vector<>();
+        Assert.assertFalse(list.addAll(vector));
+        vector.add(1);
+        Assert.assertTrue(list.addAll(vector));
+        Assert.assertArrayEquals(new Integer[] {1}, list.toArray());
+        vector.add(1);
+        vector.add(2);
+        vector.add(3);
+        Assert.assertTrue(list.addAll(vector));
+        Assert.assertArrayEquals(new Integer[] {1, 1, 1, 2, 3}, list.toArray());
+    }
+
+    @Test
+    public void retainsAllElementsInCollection() {
+        ArrayList<Integer> list = new ArrayList<>();
+        Vector<Integer> vector = new Vector<>();
+        Assert.assertFalse(list.retainAll(vector));
+        list.add(1);
+        Assert.assertTrue(list.retainAll(vector));
+        Assert.assertArrayEquals(new Integer[0], list.toArray());
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        vector.add(1);
+        vector.add(2);
+        vector.add(3);
+        Assert.assertFalse(list.retainAll(vector));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void addAllFromIndexThrowsUnsupported() {
         ArrayList<Integer> list = new ArrayList<>();
-        Boolean __ = list.addAll(0, new Vector<Integer>());
+        Boolean __ = list.addAll(0, new Vector<>());
     }
 
     @Test

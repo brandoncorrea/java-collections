@@ -82,11 +82,24 @@ public class ArrayList<T> implements List<T> {
     }
 
     public T remove(int index) {
-        throw new UnsupportedOperationException();
+        T temp = get(index);
+        shiftLeft(index);
+        return temp;
     }
 
     public boolean remove(Object value) {
-        throw new UnsupportedOperationException();
+        int index = 0;
+        while (index < size && !Objects.equals(value, values[index]))
+            index++;
+        if (index >= size) return false;
+        shiftLeft(index);
+        return true;
+    }
+
+    public void shiftLeft(int index) {
+        while (++index < size)
+            values[index - 1] = values[index];
+        size--;
     }
 
     public boolean containsAll(Collection<?> items) {
@@ -97,7 +110,9 @@ public class ArrayList<T> implements List<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        throw new UnsupportedOperationException();
+        int originalSize = size;
+        for (T item : c) add(item);
+        return size != originalSize;
     }
 
     public boolean addAll(int index, Collection<? extends T> c) {
@@ -105,11 +120,20 @@ public class ArrayList<T> implements List<T> {
     }
 
     public boolean removeAll(Collection<?> items) {
-        throw new UnsupportedOperationException();
+        int originalSize = size;
+        for (Object item : items)
+            for (int i = 0; i < size; i++)
+                if (Objects.equals(values[i], item))
+                    remove(i--);
+        return size != originalSize;
     }
 
     public boolean retainAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
+        int originalSize = size;
+        for (int i = 0; i < size; i++)
+            if (!c.contains(values[i]))
+                remove(i--);
+        return size != originalSize;
     }
 
     public void clear() {
