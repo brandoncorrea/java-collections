@@ -543,9 +543,20 @@ public class LinkedListTest {
         Assert.assertArrayEquals(new String[] { "a", "b", "c" }, list.toArray());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void removeAllThrowsUnsupported() {
-        new LinkedList<String>().removeAll(new Vector<>());
+    @Test
+    public void removesAllElementsFromCollection() {
+        LinkedList<String> list = new LinkedList<>();
+        Assert.assertFalse(list.removeAll(new Vector<>()));
+        Assert.assertFalse(list.removeAll(Arrays.asList("a", "b", "c")));
+        list.addAll(Arrays.asList("a", "b", "c"));
+        Assert.assertFalse(list.removeAll(Arrays.asList("d", "e", "f")));
+        Assert.assertArrayEquals(new String[] {"a", "b", "c"}, list.toArray());
+        Assert.assertTrue(list.removeAll(Arrays.asList("c", "d", "e")));
+        Assert.assertArrayEquals(new String[] {"a", "b"}, list.toArray());
+        Assert.assertTrue(list.removeAll(Arrays.asList("a", "c")));
+        Assert.assertArrayEquals(new String[] {"b"}, list.toArray());
+        Assert.assertTrue(list.removeAll(Arrays.asList("a", "b", "c")));
+        Assert.assertArrayEquals(new String[0], list.toArray());
     }
 
     @Test(expected = UnsupportedOperationException.class)

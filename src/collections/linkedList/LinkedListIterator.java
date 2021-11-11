@@ -14,8 +14,10 @@ public class LinkedListIterator<TValue> implements ListIterator<TValue> {
     public LinkedListIterator() { }
 
     public LinkedListIterator(LinkedNode<TValue> next) {
-        this.next = next;
-        this.prev = next.prev;
+        if (next != null) {
+            this.next = next;
+            this.prev = next.prev;
+        }
     }
 
     public LinkedListIterator(LinkedNode<TValue> next, int nextIndex) {

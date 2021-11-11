@@ -92,7 +92,15 @@ public class LinkedList<TValue> implements List<TValue> {
     }
 
     public boolean removeAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
+        int oldSize = size;
+        removeWhile(node -> c.contains(node.value));
+        ListIterator<TValue> iterator = listIterator();
+        while (iterator.hasNext())
+            if (c.contains(iterator.next())) {
+                iterator.remove();
+                size--;
+            }
+        return size != oldSize;
     }
 
     public boolean retainAll(Collection<?> c) {
@@ -217,6 +225,15 @@ public class LinkedList<TValue> implements List<TValue> {
 
     private LinkedNode<TValue> findNodeWithValue(Object value) {
         return find(node -> Objects.equals(node.value, value));
+    }
+
+    private void removeWhile(Function<LinkedNode<TValue>, Boolean> predicate) {
+        while (first != null && predicate.apply(first)) {
+            first = first.next;
+            size--;
+        }
+        if (first != null)
+            first.prev = null;
     }
 
     private void forEachNode(Consumer<LinkedNode<TValue>> func) {

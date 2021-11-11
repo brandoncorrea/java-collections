@@ -38,6 +38,13 @@ public class LinkedListIteratorTest {
     }
 
     @Test
+    public void newIteratorWithNullNode() {
+        LinkedListIterator<Integer> iterator = new LinkedListIterator<>(null);
+        Assert.assertFalse(iterator.hasPrevious());
+        Assert.assertFalse(iterator.hasNext());
+    }
+
+    @Test
     public void retrievesNextValues() {
         LinkedNode<String> first = new LinkedNode<>("a");
         first.addAfter("b");
