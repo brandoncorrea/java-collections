@@ -532,9 +532,15 @@ public class LinkedListTest {
         Assert.assertFalse(list.containsAll(items));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void addAllThrowsUnsupported() {
-        new LinkedList<String>().addAll(new Vector<>());
+    @Test
+    public void appendsListToLinkedList() {
+        LinkedList<String> list = new LinkedList<>();
+        Assert.assertFalse(list.addAll(new Vector<>()));
+        Assert.assertArrayEquals(new String[0], list.toArray());
+        Assert.assertTrue(list.addAll(Arrays.asList("a")));
+        Assert.assertArrayEquals(new String[] { "a" }, list.toArray());
+        Assert.assertTrue(list.addAll(Arrays.asList("b", "c")));
+        Assert.assertArrayEquals(new String[] { "a", "b", "c" }, list.toArray());
     }
 
     @Test(expected = UnsupportedOperationException.class)

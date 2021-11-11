@@ -16,9 +16,13 @@ public class LinkedList<TValue> implements List<TValue> {
         if (first == null)
             first = new LinkedNode<>(value);
         else
-            find(node -> node.next == null).addAfter(value);
+            last().addAfter(value);
         size++;
         return true;
+    }
+
+    private LinkedNode<TValue> last() {
+        return find(node -> node.next == null);
     }
 
     public void add(int index, TValue value) {
@@ -68,7 +72,19 @@ public class LinkedList<TValue> implements List<TValue> {
     }
 
     public boolean addAll(Collection<? extends TValue> c) {
-        throw new UnsupportedOperationException();
+        Iterator<? extends TValue> iterator = c.iterator();
+        if (!iterator.hasNext())
+            return false;
+        if (isEmpty())
+            add(iterator.next());
+        LinkedNode<TValue> cur = last();
+        while (iterator.hasNext()) {
+            cur.next = new LinkedNode<>(iterator.next());
+            cur.next.prev = cur;
+            cur = cur.next;
+            size++;
+        }
+        return true;
     }
 
     public boolean addAll(int index, Collection<? extends TValue> c) {
