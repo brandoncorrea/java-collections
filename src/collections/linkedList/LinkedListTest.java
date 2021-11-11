@@ -343,7 +343,7 @@ public class LinkedListTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void insertThrowsOnEmptyList() {
         LinkedList<String> list = new LinkedList<>();
-        list.add(0, "a");
+        list.add(1, "a");
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -363,7 +363,8 @@ public class LinkedListTest {
     @Test
     public void insertsItemAtZeroIndex() {
         LinkedList<String> list = new LinkedList<>();
-        list.add("a");
+        list.add(0, "a");
+        Assert.assertEquals("a", list.get(0));
         list.add(0, "b");
         Assert.assertEquals("b", list.get(0));
         Assert.assertEquals("a", list.get(1));
@@ -572,11 +573,30 @@ public class LinkedListTest {
         Assert.assertArrayEquals(new Integer[0], list.toArray());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void addAllAtIndexThrowsUnsupported() {
-        LinkedList<String> list = new LinkedList<>();
-        list.add("a");
-        list.addAll(0, new Vector<>());
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void addAllAtIndexThrowsForNegativeIndex() {
+        LinkedList<Integer> list = new LinkedList<>();
+        list.addAll(Arrays.asList(1, 2, 3));
+        list.addAll(-1, new Vector<>());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void addAllAtIndexThrowsForOutOfBounds() {
+        LinkedList<Integer> list = new LinkedList<>();
+        list.addAll(Arrays.asList(1, 2, 3));
+        list.addAll(4, new Vector<>());
+    }
+
+    @Test
+    public void insertsElementsAtSpecifiedIndex() {
+        LinkedList<Integer> list = new LinkedList<>();
+        Assert.assertFalse(list.addAll(0, new Vector<>()));
+        Assert.assertTrue(list.addAll(0, Arrays.asList(1)));
+        Assert.assertArrayEquals(new Integer[] {1}, list.toArray());
+        Assert.assertTrue(list.addAll(0, Arrays.asList(2, 3)));
+        Assert.assertArrayEquals(new Integer[] {2, 3, 1}, list.toArray());
+        Assert.assertTrue(list.addAll(3, Arrays.asList(4, 5)));
+        Assert.assertArrayEquals(new Integer[] {2, 3, 1, 4, 5}, list.toArray());
     }
 
     @Test

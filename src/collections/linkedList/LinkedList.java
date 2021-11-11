@@ -26,11 +26,15 @@ public class LinkedList<TValue> implements List<TValue> {
     }
 
     public void add(int index, TValue value) {
-        LinkedNode<TValue> node = nodeAt(index);
-        node.addBefore(value);
-        if (node.prev.prev == null)
-            first = node.prev;
-        size++;
+        if (index == 0 && size == 0)
+            add(value);
+        else {
+            LinkedNode<TValue> node = nodeAt(index);
+            node.addBefore(value);
+            if (node.prev.prev == null)
+                first = node.prev;
+            size++;
+        }
     }
 
     public TValue set(int index, TValue value) {
@@ -88,7 +92,22 @@ public class LinkedList<TValue> implements List<TValue> {
     }
 
     public boolean addAll(int index, Collection<? extends TValue> c) {
-        throw new UnsupportedOperationException();
+        if (index < 0 || index > size)
+            throw new IndexOutOfBoundsException();
+        Iterator<? extends TValue> newItems = c.iterator();
+        if (!newItems.hasNext())
+            return false;
+        if (index == 0) {
+            add(0, newItems.next());
+            index++;
+        }
+
+        ListIterator<TValue> currentCollection = listIterator(index);
+        while(newItems.hasNext()) {
+            currentCollection.add(newItems.next());
+            size++;
+        }
+        return true;
     }
 
     public boolean removeAll(Collection<?> c) {
