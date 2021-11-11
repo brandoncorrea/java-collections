@@ -559,9 +559,17 @@ public class LinkedListTest {
         Assert.assertArrayEquals(new String[0], list.toArray());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void retainAllThrowsUnsupported() {
-        new LinkedList<String>().retainAll(new Vector<>());
+    @Test
+    public void retainsAllElementsFromCollection() {
+        LinkedList<Integer> list = new LinkedList<>();
+        Assert.assertFalse(list.retainAll(Arrays.asList(1, 2, 3)));
+        list.addAll(Arrays.asList(1, 2, 3));
+        Assert.assertFalse(list.retainAll(Arrays.asList(1, 2, 3)));
+        Assert.assertArrayEquals(new Integer[] { 1, 2, 3 }, list.toArray());
+        Assert.assertTrue(list.retainAll(Arrays.asList(1, 2)));
+        Assert.assertArrayEquals(new Integer[] { 1, 2 }, list.toArray());
+        Assert.assertTrue(list.retainAll(Arrays.asList()));
+        Assert.assertArrayEquals(new Integer[0], list.toArray());
     }
 
     @Test(expected = UnsupportedOperationException.class)

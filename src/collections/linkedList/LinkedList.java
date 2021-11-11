@@ -93,18 +93,14 @@ public class LinkedList<TValue> implements List<TValue> {
 
     public boolean removeAll(Collection<?> c) {
         int oldSize = size;
-        removeWhile(node -> c.contains(node.value));
-        ListIterator<TValue> iterator = listIterator();
-        while (iterator.hasNext())
-            if (c.contains(iterator.next())) {
-                iterator.remove();
-                size--;
-            }
+        removeWhere(c::contains);
         return size != oldSize;
     }
 
     public boolean retainAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
+        int oldSize = size;
+        removeWhere(value -> !c.contains(value));
+        return size != oldSize;
     }
 
     public Iterator<TValue> iterator() {
@@ -227,13 +223,23 @@ public class LinkedList<TValue> implements List<TValue> {
         return find(node -> Objects.equals(node.value, value));
     }
 
-    private void removeWhile(Function<LinkedNode<TValue>, Boolean> predicate) {
-        while (first != null && predicate.apply(first)) {
+    private void removeWhile(Function<TValue, Boolean> predicate) {
+        while (first != null && predicate.apply(first.value)) {
             first = first.next;
             size--;
         }
         if (first != null)
             first.prev = null;
+    }
+
+    private void removeWhere(Function<TValue, Boolean> predicate) {
+        removeWhile(predicate);
+        ListIterator<TValue> iterator = listIterator();
+        while (iterator.hasNext())
+            if (predicate.apply(iterator.next())) {
+                iterator.remove();
+                size--;
+            }
     }
 
     private void forEachNode(Consumer<LinkedNode<TValue>> func) {
