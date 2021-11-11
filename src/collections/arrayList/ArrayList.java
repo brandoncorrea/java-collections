@@ -78,7 +78,10 @@ public class ArrayList<T> implements List<T> {
     }
 
     public void add(int index, T value) {
-        throw new UnsupportedOperationException();
+        if (index < 0 || index > size)
+            throw new IndexOutOfBoundsException();
+        shiftRight(index, 1);
+        values[index] = value;
     }
 
     public T remove(int index) {
@@ -96,10 +99,17 @@ public class ArrayList<T> implements List<T> {
         return true;
     }
 
-    public void shiftLeft(int index) {
+    private void shiftLeft(int index) {
         while (++index < size)
             values[index - 1] = values[index];
         size--;
+    }
+
+    private void shiftRight(int fromIndex, int count) {
+        while (size + count > values.length)
+            grow();
+        System.arraycopy(values, fromIndex, values, fromIndex + count, size - fromIndex);
+        size += count;
     }
 
     public boolean containsAll(Collection<?> items) {
@@ -116,7 +126,13 @@ public class ArrayList<T> implements List<T> {
     }
 
     public boolean addAll(int index, Collection<? extends T> c) {
-        throw new UnsupportedOperationException();
+        if (index < 0 || index > size)
+            throw new IndexOutOfBoundsException();
+        int oldSize = size;
+        shiftRight(index, c.size());
+        for (T value : c)
+            values[index++] = value;
+        return oldSize != size;
     }
 
     public boolean removeAll(Collection<?> items) {
@@ -147,7 +163,9 @@ public class ArrayList<T> implements List<T> {
     }
 
     public T set(int index, T element) {
-        throw new UnsupportedOperationException();
+        T value = get(index);
+        values[index] = element;
+        return value;
     }
 
     private void grow() {

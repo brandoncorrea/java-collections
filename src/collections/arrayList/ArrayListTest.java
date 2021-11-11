@@ -168,7 +168,7 @@ public class ArrayListTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void addAllThrowsOutOfBoundsForEmptyList() {
         ArrayList<Integer> list = new ArrayList<>();
-        list.addAll(0, new Vector<>());
+        list.addAll(1, new Vector<>());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -183,6 +183,20 @@ public class ArrayListTest {
         ArrayList<Integer> list = new ArrayList<>();
         list.addAll(Arrays.asList(1, 2, 3));
         list.addAll(-1, new Vector<>());
+    }
+
+    @Test
+    public void insertsListAtSpecifiedIndex() {
+        ArrayList<Integer> list = new ArrayList<>();
+        Assert.assertFalse(list.addAll(0, new Vector<>()));
+        Assert.assertTrue(list.addAll(0, Arrays.asList(1)));
+        Assert.assertArrayEquals(new Integer[] { 1 }, list.toArray());
+        Assert.assertTrue(list.addAll(0, Arrays.asList(2, 3)));
+        Assert.assertArrayEquals(new Integer[] { 2, 3, 1 }, list.toArray());
+        Assert.assertTrue(list.addAll(1, Arrays.asList(4, 5)));
+        Assert.assertArrayEquals(new Integer[] { 2, 4, 5, 3, 1 }, list.toArray());
+        Assert.assertTrue(list.addAll(5, Arrays.asList(6, 7, 8)));
+        Assert.assertArrayEquals(new Integer[] { 2, 4, 5, 3, 1, 6, 7, 8 }, list.toArray());
     }
 
     @Test
@@ -252,14 +266,59 @@ public class ArrayListTest {
             Assert.assertEquals(i + 1, (int)list.get(i));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void setThrowsUnsupported() {
-        int __ = new ArrayList<Integer>().set(0, 0);
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void setThrowsForNegativeIndex() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.addAll(Arrays.asList(1, 2, 3));
+        list.set(-1, 0);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void addAtIndexThrowsUnsupported() {
-        new ArrayList<>().add(0, 0);
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void setThrowsForOutOfBoundsIndex() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.addAll(Arrays.asList(1, 2, 3));
+        list.set(3, 0);
+    }
+
+    @Test
+    public void valuesAtIndexCanBeUpdated() {
+        ArrayList<String> list = new ArrayList<>();
+        list.addAll(Arrays.asList("a", "b", "c"));
+        Assert.assertEquals("a", list.set(0, "d"));
+        Assert.assertArrayEquals(new String[] {"d", "b", "c"}, list.toArray());
+        Assert.assertEquals("b", list.set(1, "e"));
+        Assert.assertArrayEquals(new String[] {"d", "e", "c"}, list.toArray());
+        Assert.assertEquals("c", list.set(2, "f"));
+        Assert.assertArrayEquals(new String[] {"d", "e", "f"}, list.toArray());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void addAtIndexThrowsForNegativeIndex() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.addAll(Arrays.asList(1, 2, 3));
+        list.add(-1, 0);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void addAtIndexThrowsOutOfBounds() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.addAll(Arrays.asList(1, 2, 3));
+        list.add(4, 0);
+    }
+
+    @Test
+    public void insertingItemsShiftsValuesToRight() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(0, 1);
+        Assert.assertArrayEquals(new Integer[] {1}, list.toArray());
+        list.add(0, 2);
+        Assert.assertArrayEquals(new Integer[] {2, 1}, list.toArray());
+        list.add(0, 3);
+        Assert.assertArrayEquals(new Integer[] {3, 2, 1}, list.toArray());
+        list.add(1, 4);
+        Assert.assertArrayEquals(new Integer[] {3, 4, 2, 1}, list.toArray());
+        list.add(4, 5);
+        Assert.assertArrayEquals(new Integer[] {3, 4, 2, 1, 5}, list.toArray());
     }
 
     @Test
