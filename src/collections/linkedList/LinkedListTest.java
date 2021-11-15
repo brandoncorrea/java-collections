@@ -11,6 +11,12 @@ public class LinkedListTest {
         LinkedList<Integer> list = new LinkedList<>();
         Assert.assertEquals(0, list.size());
         Assert.assertTrue(list.isEmpty());
+
+        LinkedNode<Integer> first = new LinkedNode<>(1);
+        first.addAfter(2);
+        first.next.addAfter(3);
+        list = new LinkedList<>(first);
+        Assert.assertArrayEquals(new Integer[] {1, 2, 3}, list.toArray());
     }
 
     @Test
@@ -668,6 +674,65 @@ public class LinkedListTest {
         for(int i = 0; i < 1000; i++)
             list.add(randomNumbers.nextInt(100));
         list.bubbleSort(Integer::compare);
+
+        Integer previousValue = Integer.MIN_VALUE;
+        for(Integer value : list)
+            if (value < previousValue)
+                Assert.fail();
+            else
+                previousValue = value;
+    }
+
+    @Test
+    public void mergeSortSortsToIdentity() {
+        LinkedList<Integer> list = new LinkedList<>();
+        list.mergeSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[0], list.toArray());
+
+        list.add(1);
+        list.mergeSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {1}, list.toArray());
+
+        list.add(2);
+        list.mergeSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {1, 2}, list.toArray());
+
+        list.add(3);
+        list.mergeSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {1, 2, 3}, list.toArray());
+
+        list.add(4);
+        list.mergeSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {1, 2, 3, 4}, list.toArray());
+    }
+
+    @Test
+    public void mergeSortsManyValues() {
+        LinkedList<Integer> list = new LinkedList<>();
+
+        list.addAll(Arrays.asList(9, 8, 7, 6, 5, 4, 3, 2, 1));
+        list.mergeSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9}, list.toArray());
+        list.clear();
+
+        list.addAll(Arrays.asList(2, 1));
+        list.mergeSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {1, 2}, list.toArray());
+        list.addAll(Arrays.asList(4, 5, 3));
+        list.mergeSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {1, 2, 3, 4, 5}, list.toArray());
+        list.addAll(Arrays.asList(9, 8, 7, 6, 5, 4, 3, 2, 1));
+        list.mergeSort(Integer::compare);
+        Assert.assertArrayEquals(new Integer[] {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 7, 8, 9}, list.toArray());
+    }
+
+    @Test
+    public void mergeSortsOneThousandRandomNumbers() {
+        LinkedList<Integer> list = new LinkedList<>();
+        Random randomNumbers = new Random();
+        for(int i = 0; i < 1000; i++)
+            list.add(randomNumbers.nextInt(100));
+        list.mergeSort(Integer::compare);
 
         Integer previousValue = Integer.MIN_VALUE;
         for(Integer value : list)

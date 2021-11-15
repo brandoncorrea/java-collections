@@ -12,6 +12,18 @@ public class LinkedList<TValue> implements List<TValue> {
     private LinkedNode<TValue> first;
     private int size = 0;
 
+    public LinkedList() { }
+
+    public LinkedList(LinkedNode<TValue> first) {
+        this.first = first;
+        if (first == null) return;
+        LinkedNode<TValue> cur = first;
+        do {
+            size++;
+            cur = cur.next;
+        } while(cur != null);
+    }
+
     public boolean add(TValue value) {
         if (first == null)
             first = new LinkedNode<>(value);
@@ -216,6 +228,61 @@ public class LinkedList<TValue> implements List<TValue> {
         TValue temp = a.value;
         a.value = b.value;
         b.value = temp;
+    }
+
+    public void mergeSort(BiFunction<TValue, TValue, Integer> comparer) {
+        if (first == null || first.next == null) return;
+        LinkedList<TValue> left = new LinkedList<>();
+        LinkedList<TValue> right = new LinkedList<>();
+
+        Iterator<TValue> iterator = iterator();
+        for (int i = 0; i < size / 2; i++)
+            left.add(iterator.next());
+
+        while (iterator.hasNext())
+            right.add(iterator.next());
+
+        left.mergeSort(comparer);
+        right.mergeSort(comparer);
+        clear();
+        mergeIntoList(left, right, comparer);
+    }
+
+    private void mergeIntoList(List<TValue> left, List<TValue> right, BiFunction<TValue, TValue, Integer> comparer) {
+        Iterator<TValue> leftIterator = left.iterator();
+        Iterator<TValue> rightIterator = right.iterator();
+
+        TValue leftItem = leftIterator.next();
+        TValue rightItem = rightIterator.next();
+        while (leftIterator.hasNext() && rightIterator.hasNext()) {
+            if (comparer.apply(leftItem, rightItem) > 0) {
+                add(rightItem);
+                rightItem = rightIterator.next();
+            } else {
+                add(leftItem);
+                leftItem = leftIterator.next();
+            }
+        }
+
+        while (rightIterator.hasNext() && comparer.apply(leftItem, rightItem) >= 0) {
+            add(rightItem);
+            rightItem = rightIterator.next();
+        }
+        while (leftIterator.hasNext() && comparer.apply(leftItem, rightItem) <= 0) {
+            add(leftItem);
+            leftItem = leftIterator.next();
+        }
+
+        if (comparer.apply(leftItem, rightItem) > 0) {
+            add(rightItem);
+            add(leftItem);
+        } else {
+            add(leftItem);
+            add(rightItem);
+        }
+
+        while (leftIterator.hasNext()) add(leftIterator.next());
+        while (rightIterator.hasNext()) add(rightIterator.next());
     }
 
     private boolean removeNode(LinkedNode<TValue> node) {
