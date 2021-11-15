@@ -48,7 +48,14 @@ public class ArrayListIterator<T> implements ListIterator<T> {
     }
 
     public void remove() {
-        throw new UnsupportedOperationException();
+        if (nextCalled)
+            list.remove(index-- - 1);
+        else if (previousCalled)
+            list.remove(index);
+        else
+            throw new IllegalStateException();
+        nextCalled = false;
+        previousCalled = false;
     }
 
     public void set(T t) {

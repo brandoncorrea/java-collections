@@ -94,6 +94,14 @@ public class ArrayListIteratorTest {
         iterator.set(5);
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void setThrowsIfRemoveWasCalled() {
+        ListIterator<Integer> iterator = new ArrayListIterator<>(new Integer[]{1, 2, 3});
+        iterator.next();
+        iterator.remove();
+        iterator.set(5);
+    }
+
     @Test
     public void setsLastItemReturnedByNextOrPrevious() {
         ListIterator<Integer> iterator = new ArrayListIterator<>(new Integer[]{1, 2, 3});
@@ -113,10 +121,34 @@ public class ArrayListIteratorTest {
         Assert.assertEquals(5, (int)iterator.next());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void removeThrowsUnsupported() {
-        ListIterator<Integer> iterator = new ArrayListIterator<>();
+    @Test(expected = IllegalStateException.class)
+    public void removeThrowsIfNextOrPreviousNotCalled() {
+        ListIterator<Integer> iterator = new ArrayListIterator<>(new Integer[]{1, 2, 3});
         iterator.remove();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void removeThrowsIfAddHasBeenCalled() {
+        ListIterator<Integer> iterator = new ArrayListIterator<>(new Integer[] {1, 2, 3});
+        iterator.next();
+        iterator.add(4);
+        iterator.remove();
+    }
+
+    @Test
+    public void removesLastElementReturned() {
+        ListIterator<Integer> iterator = new ArrayListIterator<>(new Integer[] {1, 2, 3});
+        iterator.next();
+        iterator.remove();
+        Assert.assertFalse(iterator.hasPrevious());
+        Assert.assertEquals(2, (int)iterator.next());
+        Assert.assertEquals(3, (int)iterator.next());
+        Assert.assertFalse(iterator.hasNext());
+        Assert.assertEquals(3, (int)iterator.previous());
+        iterator.remove();
+        Assert.assertFalse(iterator.hasNext());
+        Assert.assertEquals(2, (int)iterator.previous());
+        Assert.assertFalse(iterator.hasPrevious());
     }
 
     @Test
