@@ -94,19 +94,6 @@ public class ArrayList<T> implements List<T> {
         return true;
     }
 
-    private void shiftLeft(int index) {
-        while (++index < size)
-            values[index - 1] = values[index];
-        size--;
-    }
-
-    private void shiftRight(int fromIndex, int count) {
-        while (size + count > values.length)
-            grow();
-        System.arraycopy(values, fromIndex, values, fromIndex + count, size - fromIndex);
-        size += count;
-    }
-
     public boolean containsAll(Collection<?> items) {
         for (Object item : items)
             if (!contains(item))
@@ -163,6 +150,21 @@ public class ArrayList<T> implements List<T> {
         return value;
     }
 
+    public int indexOf(Object item) {
+        for(int i = 0; i < size; i++)
+            if (Objects.equals(values[i], item))
+                return i;
+        return -1;
+    }
+
+    public int lastIndexOf(Object item) {
+        int lastIndex = -1;
+        for (int i = 0; i < size; i++)
+            if (Objects.equals(values[i], item))
+                lastIndex = i;
+        return lastIndex;
+    }
+
     private void grow() {
         T[] oldList = values;
         values = allocateArray(values.length * 2);
@@ -181,18 +183,16 @@ public class ArrayList<T> implements List<T> {
         System.arraycopy(source, 0, destination, 0, source.length);
     }
 
-    public int indexOf(Object item) {
-        for(int i = 0; i < size; i++)
-            if (Objects.equals(values[i], item))
-                return i;
-        return -1;
+    private void shiftLeft(int index) {
+        while (++index < size)
+            values[index - 1] = values[index];
+        size--;
     }
 
-    public int lastIndexOf(Object item) {
-        int lastIndex = -1;
-        for (int i = 0; i < size; i++)
-            if (Objects.equals(values[i], item))
-                lastIndex = i;
-        return lastIndex;
+    private void shiftRight(int fromIndex, int count) {
+        while (size + count > values.length)
+            grow();
+        System.arraycopy(values, fromIndex, values, fromIndex + count, size - fromIndex);
+        size += count;
     }
 }
