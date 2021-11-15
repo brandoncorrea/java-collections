@@ -23,6 +23,10 @@ public class ArrayListIterator<T> implements ListIterator<T> {
     }
 
     public ArrayListIterator(ArrayList<T> list) { this.list = list; }
+    public ArrayListIterator(ArrayList<T> list, int nextIndex) {
+        this.list = list;
+        index = nextIndex;
+    }
 
     public boolean hasNext() { return index < list.size(); }
 

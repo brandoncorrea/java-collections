@@ -41,7 +41,7 @@ public class ArrayList<T> implements List<T> {
     public ListIterator<T> listIterator(int index) {
         if (index < 0 || index > size)
             throw new IndexOutOfBoundsException();
-        return new ArrayListIterator<>((T[])toArray(), index);
+        return new ArrayListIterator<T>(this, index);
     }
 
     public List<T> subList(int fromIndex, int toIndex) {
