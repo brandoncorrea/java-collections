@@ -80,10 +80,29 @@ public class ArrayListIteratorTest {
         Assert.assertEquals(0, iterator.nextIndex());
     }
 
-    @Test
-    public void setsLastItemReturned() {
-        ListIterator<Integer> iterator = new ArrayListIterator<>();
+    @Test(expected = IllegalStateException.class)
+    public void setThrowsIfNextOrPreviousHasNotBeenCalled() {
+        ListIterator<Integer> iterator = new ArrayListIterator<>(new Integer[]{1, 2, 3});
         iterator.set(1);
+    }
+
+    @Test
+    public void setsLastItemReturnedByNextOrPrevious() {
+        ListIterator<Integer> iterator = new ArrayListIterator<>(new Integer[]{1, 2, 3});
+        iterator.next();
+        iterator.set(4);
+        Assert.assertEquals(4, (int)iterator.previous());
+        Assert.assertEquals(4, (int)iterator.next());
+        Assert.assertEquals(2, (int)iterator.next());
+        Assert.assertEquals(3, (int)iterator.next());
+        iterator.set(5);
+        Assert.assertEquals(5, (int)iterator.previous());
+        Assert.assertEquals(2, (int)iterator.previous());
+        Assert.assertEquals(4, (int)iterator.previous());
+        iterator.set(6);
+        Assert.assertEquals(6, (int)iterator.next());
+        Assert.assertEquals(2, (int)iterator.next());
+        Assert.assertEquals(5, (int)iterator.next());
     }
 
     @Test(expected = UnsupportedOperationException.class)

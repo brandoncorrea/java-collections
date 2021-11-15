@@ -6,6 +6,8 @@ public class ArrayListIterator<T> implements ListIterator<T> {
 
     private int index = 0;
     private final ArrayList<T> list;
+    private boolean previousCalled = false;
+    private boolean nextCalled = false;
 
     public ArrayListIterator() {
         list = new ArrayList<>();
@@ -24,11 +26,18 @@ public class ArrayListIterator<T> implements ListIterator<T> {
 
     public boolean hasNext() { return index < list.size(); }
 
-    public T next() { return list.get(index++); }
+    public T next() {
+        previousCalled = false;
+        nextCalled = true;
+        return list.get(index++);
+    }
 
     public boolean hasPrevious() { return index > 0; }
 
-    public T previous() { return list.get(index-- - 1); }
+    public T previous() {
+        nextCalled = false;
+        previousCalled = true;
+        return list.get(index-- - 1); }
 
     public int nextIndex() {
         return index;
@@ -43,7 +52,12 @@ public class ArrayListIterator<T> implements ListIterator<T> {
     }
 
     public void set(T t) {
-        throw new UnsupportedOperationException();
+        if (nextCalled)
+            list.set(index - 1, t);
+        else if (previousCalled)
+            list.set(index, t);
+        else
+            throw new IllegalStateException();
     }
 
     public void add(T t) {
