@@ -86,6 +86,14 @@ public class ArrayListIteratorTest {
         iterator.set(1);
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void setThrowsIfAddWasCalled() {
+        ListIterator<Integer> iterator = new ArrayListIterator<>(new Integer[]{1, 2, 3});
+        iterator.next();
+        iterator.add(4);
+        iterator.set(5);
+    }
+
     @Test
     public void setsLastItemReturnedByNextOrPrevious() {
         ListIterator<Integer> iterator = new ArrayListIterator<>(new Integer[]{1, 2, 3});

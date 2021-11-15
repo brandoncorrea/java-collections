@@ -61,6 +61,8 @@ public class ArrayListIterator<T> implements ListIterator<T> {
     }
 
     public void add(T t) {
+        nextCalled = false;
+        previousCalled = false;
         list.add(index++, t);
     }
 }
