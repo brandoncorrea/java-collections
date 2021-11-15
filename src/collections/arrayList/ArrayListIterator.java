@@ -4,37 +4,31 @@ import java.util.ListIterator;
 
 public class ArrayListIterator<T> implements ListIterator<T> {
 
-    private final T[] values;
     private int index = 0;
+    private final ArrayList<T> list;
 
     public ArrayListIterator() {
-        values = (T[])new Object[0];
+        list = new ArrayList<>();
     }
 
     public ArrayListIterator(T[] values) {
-        this.values = values;
+        list = new ArrayList<>(values);
     }
 
     public ArrayListIterator(T[] values, int nextIndex) {
-        this.values = values;
+        list = new ArrayList<>(values);
         index = nextIndex;
     }
 
-    public boolean hasNext() {
-        return index < values.length;
-    }
+    public ArrayListIterator(ArrayList<T> list) { this.list = list; }
 
-    public T next() {
-        return values[index++];
-    }
+    public boolean hasNext() { return index < list.size(); }
 
-    public boolean hasPrevious() {
-        return index > 0;
-    }
+    public T next() { return list.get(index++); }
 
-    public T previous() {
-        return values[index-- - 1];
-    }
+    public boolean hasPrevious() { return index > 0; }
+
+    public T previous() { return list.get(index-- - 1); }
 
     public int nextIndex() {
         return index;

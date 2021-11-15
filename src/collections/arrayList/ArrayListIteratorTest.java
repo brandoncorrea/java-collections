@@ -3,6 +3,7 @@ package collections.arrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.ListIterator;
 
 public class ArrayListIteratorTest {
@@ -14,6 +15,12 @@ public class ArrayListIteratorTest {
         Assert.assertFalse(iterator.hasPrevious());
         Assert.assertEquals(0, iterator.nextIndex());
         Assert.assertEquals(-1, iterator.previousIndex());
+
+        ArrayList<Integer> list = new ArrayList<>();
+        list.addAll(Arrays.asList(1, 2, 3));
+        iterator = new ArrayListIterator<>(list);
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertFalse(iterator.hasPrevious());
 
         iterator = new ArrayListIterator<>(new Integer[] {1, 2, 3});
         Assert.assertTrue(iterator.hasNext());
@@ -73,8 +80,8 @@ public class ArrayListIteratorTest {
         Assert.assertEquals(0, iterator.nextIndex());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void setThrowsUnsupported() {
+    @Test
+    public void setsLastItemReturned() {
         ListIterator<Integer> iterator = new ArrayListIterator<>();
         iterator.set(1);
     }
