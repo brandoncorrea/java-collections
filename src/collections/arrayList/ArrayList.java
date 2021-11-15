@@ -1,6 +1,7 @@
 package collections.arrayList;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class ArrayList<T> implements List<T> {
 
@@ -41,16 +42,13 @@ public class ArrayList<T> implements List<T> {
     public ListIterator<T> listIterator(int index) {
         if (index < 0 || index > size)
             throw new IndexOutOfBoundsException();
-        return new ArrayListIterator<T>(this, index);
+        return new ArrayListIterator<>(this, index);
     }
 
     public List<T> subList(int fromIndex, int toIndex) {
         if (fromIndex < 0 || toIndex > size || fromIndex > toIndex)
             throw new IndexOutOfBoundsException();
-        List<T> list = new ArrayList<>();
-        while (fromIndex < toIndex)
-            list.add(values[fromIndex++]);
-        return list;
+        return new ArrayList<>(Arrays.copyOfRange(values, fromIndex, toIndex));
     }
 
     public Object[] toArray() {
@@ -102,36 +100,25 @@ public class ArrayList<T> implements List<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        int originalSize = size;
-        for (T item : c) add(item);
-        return size != originalSize;
+        return addAll(size, c);
     }
 
     public boolean addAll(int index, Collection<? extends T> c) {
         if (index < 0 || index > size)
             throw new IndexOutOfBoundsException();
-        int oldSize = size;
+        int originalSize = size;
         shiftRight(index, c.size());
         for (T value : c)
             values[index++] = value;
-        return oldSize != size;
+        return originalSize != size;
     }
 
     public boolean removeAll(Collection<?> items) {
-        int originalSize = size;
-        for (Object item : items)
-            for (int i = 0; i < size; i++)
-                if (Objects.equals(values[i], item))
-                    remove(i--);
-        return size != originalSize;
+        return removeWhere(items::contains);
     }
 
-    public boolean retainAll(Collection<?> c) {
-        int originalSize = size;
-        for (int i = 0; i < size; i++)
-            if (!c.contains(values[i]))
-                remove(i--);
-        return size != originalSize;
+    public boolean retainAll(Collection<?> items) {
+        return removeWhere(element -> !items.contains(element));
     }
 
     public void clear() {
@@ -158,35 +145,30 @@ public class ArrayList<T> implements List<T> {
     }
 
     public int lastIndexOf(Object item) {
-        int lastIndex = -1;
-        for (int i = 0; i < size; i++)
+        for (int i = size - 1; i >= 0; i--)
             if (Objects.equals(values[i], item))
-                lastIndex = i;
-        return lastIndex;
+                return i;
+        return -1;
     }
 
-    private void grow() {
-        T[] oldList = values;
-        values = allocateArray(values.length * 2);
-        copyTo(oldList, values);
-    }
+    private void grow() { values = Arrays.copyOf(values, values.length * 2); }
 
-    private T[] allocateArray(int length) {
-        return (T[]) new Object[length];
-    }
+    private T[] allocateArray(int length) { return (T[]) new Object[length]; }
 
-    private void copyTo(Object[] destination) {
-        System.arraycopy(values, 0, destination, 0, size);
-    }
-
-    private void copyTo(T[] source, T[] destination) {
-        System.arraycopy(source, 0, destination, 0, source.length);
-    }
+    private void copyTo(Object[] destination) { System.arraycopy(values, 0, destination, 0, size); }
 
     private void shiftLeft(int index) {
         while (++index < size)
             values[index - 1] = values[index];
         size--;
+    }
+
+    private boolean removeWhere(Function<T, Boolean> predicate) {
+        int oldSize = size;
+        for (int i = 0; i < size; i++)
+            if (predicate.apply(values[i]))
+                remove(i--);
+        return size != oldSize;
     }
 
     private void shiftRight(int fromIndex, int count) {
