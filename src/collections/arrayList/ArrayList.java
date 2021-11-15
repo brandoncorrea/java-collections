@@ -31,7 +31,7 @@ public class ArrayList<T> implements List<T> {
     public boolean contains(Object value) { return indexOf(value) >= 0; }
 
     public Iterator<T> iterator() {
-        return new ArrayIterator<>((T[])toArray());
+        return new ArrayIterator<>(values, size);
     }
 
     public ListIterator<T> listIterator() {
