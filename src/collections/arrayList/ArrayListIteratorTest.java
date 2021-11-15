@@ -111,9 +111,19 @@ public class ArrayListIteratorTest {
         iterator.remove();
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void addThrowsUnsupported() {
+    @Test
+    public void addsElementsBeforeNext() {
         ListIterator<Integer> iterator = new ArrayListIterator<>();
         iterator.add(1);
+        Assert.assertFalse(iterator.hasNext());
+        Assert.assertEquals(1, (int)iterator.previous());
+        iterator.add(2);
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertTrue(iterator.hasPrevious());
+        Assert.assertEquals(2, (int)iterator.previous());
+        Assert.assertFalse(iterator.hasPrevious());
+        Assert.assertEquals(2, (int)iterator.next());
+        Assert.assertEquals(1, (int)iterator.next());
+        Assert.assertFalse(iterator.hasNext());
     }
 }

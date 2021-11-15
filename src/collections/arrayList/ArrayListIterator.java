@@ -61,6 +61,6 @@ public class ArrayListIterator<T> implements ListIterator<T> {
     }
 
     public void add(T t) {
-        throw new UnsupportedOperationException();
+        list.add(index++, t);
     }
 }
