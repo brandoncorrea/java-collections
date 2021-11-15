@@ -28,12 +28,7 @@ public class ArrayList<T> implements List<T> {
         return size == 0;
     }
 
-    public boolean contains(Object value) {
-        for (T item : values)
-            if (Objects.equals(item, value))
-                return true;
-        return false;
-    }
+    public boolean contains(Object value) { return indexOf(value) >= 0; }
 
     public Iterator<T> iterator() {
         return new ArrayIterator<>((T[])toArray());
