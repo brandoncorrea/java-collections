@@ -6,16 +6,20 @@ import java.util.NoSuchElementException;
 public class ArrayIterator<T> implements Iterator<T> {
 
     private final T[] values;
-    private int index;
+    private int index = 0;
+    private final int size;
 
     public ArrayIterator(T[] values) {
         this.values = values;
-        index = 0;
+        this.size = values.length;
     }
 
-    public boolean hasNext() {
-        return values.length > index;
+    public ArrayIterator(T[] values, int size) {
+        this.values  = values;
+        this.size = size;
     }
+
+    public boolean hasNext() { return size > index; }
 
     public T next() {
         if (hasNext())

@@ -12,6 +12,10 @@ public class ArrayIteratorTest {
     public void newArrayIterator() {
         Iterator<Integer> iterator = new ArrayIterator<>(new Integer[0]);
         Assert.assertFalse(iterator.hasNext());
+        iterator = new ArrayIterator<>(new Integer[] {1, 2, 3}, 2);
+        Assert.assertEquals(1, (int)iterator.next());
+        Assert.assertEquals(2, (int)iterator.next());
+        Assert.assertFalse(iterator.hasNext());
     }
 
     @Test(expected = NoSuchElementException.class)
