@@ -9,16 +9,15 @@ public class ArrayList<T> implements List<T> {
     private int size = 0;
 
     public ArrayList() {
-        values = allocateArray(1);
+        values = (T[]) new Object[1];
     }
 
     public ArrayList(T[] values) {
+        size = values.length;
         if (values.length == 0)
-            this.values = allocateArray(1);
-        else {
+            this.values = (T[]) new Object[1];
+        else
             this.values = values;
-            size = values.length;
-        }
     }
 
     public int size() {
@@ -51,15 +50,11 @@ public class ArrayList<T> implements List<T> {
         return new ArrayList<>(Arrays.copyOfRange(values, fromIndex, toIndex));
     }
 
-    public Object[] toArray() {
-        T[] subArray = allocateArray(size);
-        copyTo(subArray);
-        return subArray;
-    }
+    public Object[] toArray() { return Arrays.copyOf(values, size); }
 
     public <T1> T1[] toArray(T1[] a) {
         if (a.length <= size) return (T1[])toArray();
-        copyTo(a);
+        System.arraycopy(values, 0, a, 0, size);
         a[size] = null;
         return a;
     }
@@ -99,16 +94,16 @@ public class ArrayList<T> implements List<T> {
         return true;
     }
 
-    public boolean addAll(Collection<? extends T> c) {
-        return addAll(size, c);
+    public boolean addAll(Collection<? extends T> items) {
+        return addAll(size, items);
     }
 
-    public boolean addAll(int index, Collection<? extends T> c) {
+    public boolean addAll(int index, Collection<? extends T> items) {
         if (index < 0 || index > size)
             throw new IndexOutOfBoundsException();
         int originalSize = size;
-        shiftRight(index, c.size());
-        for (T value : c)
+        shiftRight(index, items.size());
+        for (T value : items)
             values[index++] = value;
         return originalSize != size;
     }
@@ -152,10 +147,6 @@ public class ArrayList<T> implements List<T> {
     }
 
     private void grow() { values = Arrays.copyOf(values, values.length * 2); }
-
-    private T[] allocateArray(int length) { return (T[]) new Object[length]; }
-
-    private void copyTo(Object[] destination) { System.arraycopy(values, 0, destination, 0, size); }
 
     private void shiftLeft(int index) {
         while (++index < size)
