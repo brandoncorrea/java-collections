@@ -1,10 +1,7 @@
 package collections.linkedList;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class LinkedList<TValue> implements List<TValue> {
@@ -38,7 +35,7 @@ public class LinkedList<TValue> implements List<TValue> {
     }
 
     public void add(int index, TValue value) {
-        if (index == 0 && size == 0)
+        if (index == size)
             add(value);
         else {
             LinkedNode<TValue> node = nodeAt(index);
@@ -106,19 +103,16 @@ public class LinkedList<TValue> implements List<TValue> {
     public boolean addAll(int index, Collection<? extends TValue> c) {
         if (index < 0 || index > size)
             throw new IndexOutOfBoundsException();
+        if (c.size() == 0) return false;
         Iterator<? extends TValue> newItems = c.iterator();
-        if (!newItems.hasNext())
-            return false;
         if (index == 0) {
             add(0, newItems.next());
             index++;
         }
 
         ListIterator<TValue> currentCollection = listIterator(index);
-        while(newItems.hasNext()) {
+        while(newItems.hasNext())
             currentCollection.add(newItems.next());
-            size++;
-        }
         return true;
     }
 
@@ -141,7 +135,8 @@ public class LinkedList<TValue> implements List<TValue> {
     public Object[] toArray() {
         Object[] list = new Object[size];
         int index = 0;
-        for (TValue el : this) list[index++] = el;
+        for (TValue el : this)
+            list[index++] = el;
         return list;
     }
 
@@ -176,15 +171,13 @@ public class LinkedList<TValue> implements List<TValue> {
     }
 
     public ListIterator<TValue> listIterator() {
-        return new LinkedListIterator<>(first);
+        return listIterator(0);
     }
 
     public ListIterator<TValue> listIterator(int index) {
         if (index < 0 || index > size)
             throw new IndexOutOfBoundsException();
-        ListIterator<TValue> iterator = listIterator();
-        while (index-- > 0) iterator.next();
-        return iterator;
+        return new LinkedListIterator<>(this, index);
     }
 
     public List<TValue> subList(int fromIndex, int toIndex) {
@@ -213,86 +206,17 @@ public class LinkedList<TValue> implements List<TValue> {
         return true;
     }
 
-    public void bubbleSort(BiFunction<TValue, TValue, Integer> comparer) {
-        AtomicBoolean hasSwapped = new AtomicBoolean(true);
-        while (hasSwapped.getAndSet(false))
-            forEachNode(node -> {
-                if (node.next != null && comparer.apply(node.value, node.next.value) == 1) {
-                    swapValues(node, node.next);
-                    hasSwapped.set(true);
-                }
-            });
-    }
-
-    private void swapValues(LinkedNode<TValue> a, LinkedNode<TValue> b) {
-        TValue temp = a.value;
-        a.value = b.value;
-        b.value = temp;
-    }
-
-    public void mergeSort(BiFunction<TValue, TValue, Integer> comparer) {
-        if (first == null || first.next == null) return;
-        LinkedList<TValue> left = new LinkedList<>();
-        LinkedList<TValue> right = new LinkedList<>();
-
-        Iterator<TValue> iterator = iterator();
-        for (int i = 0; i < size / 2; i++)
-            left.add(iterator.next());
-
-        while (iterator.hasNext())
-            right.add(iterator.next());
-
-        left.mergeSort(comparer);
-        right.mergeSort(comparer);
-        clear();
-        mergeIntoList(left, right, comparer);
-    }
-
-    private void mergeIntoList(List<TValue> left, List<TValue> right, BiFunction<TValue, TValue, Integer> comparer) {
-        Iterator<TValue> leftIterator = left.iterator();
-        Iterator<TValue> rightIterator = right.iterator();
-
-        TValue leftItem = leftIterator.next();
-        TValue rightItem = rightIterator.next();
-        while (leftIterator.hasNext() && rightIterator.hasNext()) {
-            if (comparer.apply(leftItem, rightItem) > 0) {
-                add(rightItem);
-                rightItem = rightIterator.next();
-            } else {
-                add(leftItem);
-                leftItem = leftIterator.next();
-            }
-        }
-
-        while (rightIterator.hasNext() && comparer.apply(leftItem, rightItem) >= 0) {
-            add(rightItem);
-            rightItem = rightIterator.next();
-        }
-        while (leftIterator.hasNext() && comparer.apply(leftItem, rightItem) <= 0) {
-            add(leftItem);
-            leftItem = leftIterator.next();
-        }
-
-        if (comparer.apply(leftItem, rightItem) > 0) {
-            add(rightItem);
-            add(leftItem);
-        } else {
-            add(leftItem);
-            add(rightItem);
-        }
-
-        while (leftIterator.hasNext()) add(leftIterator.next());
-        while (rightIterator.hasNext()) add(rightIterator.next());
-    }
-
     private boolean removeNode(LinkedNode<TValue> node) {
         if (node == null) return false;
         if (node.prev == null) {
             first = node.next;
             if (first != null)
                 first.prev = null;
-        } else
+        } else {
             node.prev.next = node.next;
+            if (node.next != null)
+                node.next.prev = node.prev;
+        }
         size--;
         return true;
     }
@@ -322,15 +246,8 @@ public class LinkedList<TValue> implements List<TValue> {
         removeWhile(predicate);
         ListIterator<TValue> iterator = listIterator();
         while (iterator.hasNext())
-            if (predicate.apply(iterator.next())) {
+            if (predicate.apply(iterator.next()))
                 iterator.remove();
-                size--;
-            }
-    }
-
-    private void forEachNode(Consumer<LinkedNode<TValue>> func) {
-        for (LinkedNode<TValue> node = first; node != null; node = node.next)
-            func.accept(node);
     }
 
     private LinkedNode<TValue> find(Function<LinkedNode<TValue>, Boolean> predicate) {
