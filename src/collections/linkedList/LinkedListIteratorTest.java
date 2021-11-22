@@ -2,7 +2,6 @@ package collections.linkedList;
 
 import org.junit.Assert;
 import org.junit.Test;
-import sun.awt.image.ImageWatched;
 
 import java.util.*;
 
