@@ -2,33 +2,32 @@ package collections.linkedList;
 
 import org.junit.Assert;
 import org.junit.Test;
+import sun.awt.image.ImageWatched;
+
 import java.util.*;
 
 public class LinkedListIteratorTest {
 
     private <T> LinkedListIterator<T> createIterator(T... elements) {
-        LinkedNode<T> node = new LinkedNode<>();
-        LinkedNode<T> cur = node;
-        for(T el : elements) {
-            cur.addAfter(el);
-            cur = cur.next;
-        }
-        node.next.prev = null;
-        return new LinkedListIterator<>(node.next);
+        LinkedList<T> list = new LinkedList<T>();
+        Collections.addAll(list, elements);
+        return new LinkedListIterator<>(list);
     }
 
     @Test
     public void newLinkedListIterator() {
-        LinkedListIterator<String> iterator = new LinkedListIterator<>();
+        LinkedList<String> list = new LinkedList<>();
+        LinkedListIterator<String> iterator = new LinkedListIterator<>(list);
         Assert.assertFalse(iterator.hasPrevious());
         Assert.assertFalse(iterator.hasNext());
-        iterator = new LinkedListIterator<>(new LinkedNode<>("a"));
+        list.add("a");
+        iterator = new LinkedListIterator<>(list);
         Assert.assertFalse(iterator.hasPrevious());
         Assert.assertTrue(iterator.hasNext());
-        LinkedNode<String> node = new LinkedNode<>("b");
-        node.addBefore("a");
-        node.addAfter("c");
-        iterator = new LinkedListIterator<>(node, 1);
+
+        list.add("b");
+        list.add("c");
+        iterator = new LinkedListIterator<>(list, 1);
         Assert.assertTrue(iterator.hasPrevious());
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals(0, iterator.previousIndex());
@@ -38,18 +37,10 @@ public class LinkedListIteratorTest {
     }
 
     @Test
-    public void newIteratorWithNullNode() {
-        LinkedListIterator<Integer> iterator = new LinkedListIterator<>(null);
-        Assert.assertFalse(iterator.hasPrevious());
-        Assert.assertFalse(iterator.hasNext());
-    }
-
-    @Test
     public void retrievesNextValues() {
-        LinkedNode<String> first = new LinkedNode<>("a");
-        first.addAfter("b");
-        first.next.addAfter("c");
-        Iterator<String> iterator = new LinkedListIterator<>(first);
+        LinkedList<String> list = new LinkedList<>();
+        list.addAll(Arrays.asList("a", "b", "c"));
+        Iterator<String> iterator = new LinkedListIterator<>(list);
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals("a", iterator.next());
         Assert.assertTrue(iterator.hasNext());
@@ -66,12 +57,14 @@ public class LinkedListIteratorTest {
 
     @Test(expected = NoSuchElementException.class)
     public void iteratorThrowsOnPreviousForEmptyList() {
-        new LinkedListIterator<>().previous();
+        new LinkedListIterator<>(new LinkedList<>()).previous();
     }
 
     @Test
     public void iteratorRetrievesPreviousElement() {
-        LinkedListIterator<String> iterator = createIterator("a", "b", "c");
+        LinkedList<String> list = new LinkedList<>();
+        list.addAll(Arrays.asList("a", "b", "c"));
+        ListIterator<String> iterator = new LinkedListIterator<>(list);
         iterator.next();
         iterator.next();
         iterator.next();
@@ -86,8 +79,10 @@ public class LinkedListIteratorTest {
 
     @Test
     public void retrievesIndexOfNextElement() {
-        Assert.assertEquals(0, new LinkedListIterator<>().nextIndex());
-        LinkedListIterator<String> iterator = createIterator("a", "b", "c");
+        LinkedList<String> list = new LinkedList<>();
+        Assert.assertEquals(0, new LinkedListIterator<>(list).nextIndex());
+        list.addAll(Arrays.asList("a", "b", "c"));
+        ListIterator<String> iterator = list.listIterator();
         Assert.assertEquals(0, iterator.nextIndex());
         iterator.next();
         Assert.assertEquals(1, iterator.nextIndex());
@@ -99,8 +94,10 @@ public class LinkedListIteratorTest {
 
     @Test
     public void retrievesIndexOfPreviousElement() {
-        Assert.assertEquals(-1, new LinkedListIterator<>().previousIndex());
-        LinkedListIterator<String> iterator = createIterator("a", "b", "c");
+        LinkedList<String> list = new LinkedList<>();
+        Assert.assertEquals(-1, new LinkedListIterator<>(list).previousIndex());
+        list.addAll(Arrays.asList("a", "b", "c"));
+        ListIterator<String> iterator = list.listIterator();
         iterator.next();
         iterator.next();
         Assert.assertEquals(1, iterator.previousIndex());
@@ -112,7 +109,8 @@ public class LinkedListIteratorTest {
 
     @Test
     public void addsItemsToIterator() {
-        LinkedListIterator<String> iterator = new LinkedListIterator<>();
+        LinkedList<String> list = new LinkedList<>();
+        LinkedListIterator<String> iterator = new LinkedListIterator<>(list);
         iterator.add("a");
         Assert.assertTrue(iterator.hasPrevious());
         Assert.assertFalse(iterator.hasNext());
@@ -143,7 +141,9 @@ public class LinkedListIteratorTest {
 
     @Test(expected = IllegalStateException.class)
     public void removeThrowsAfterRemoval() {
-        LinkedListIterator<String> iterator = createIterator("a", "b", "c");
+        LinkedList<String> list = new LinkedList<>();
+        list.addAll(Arrays.asList("a", "b", "c"));
+        ListIterator<String> iterator = new LinkedListIterator<>(list);
         iterator.next();
         iterator.remove();
         iterator.remove();
@@ -159,8 +159,10 @@ public class LinkedListIteratorTest {
 
     @Test
     public void removesFirstElement() {
-        LinkedListIterator<String> iterator = createIterator("a", "b", "c");
-        iterator.next();
+        LinkedList<String> list = new LinkedList<>();
+        list.addAll(Arrays.asList("a", "b", "c"));
+        ListIterator<String> iterator = list.listIterator();
+        Assert.assertEquals("a", iterator.next());
         iterator.remove();
         Assert.assertFalse(iterator.hasPrevious());
         Assert.assertEquals(0, iterator.nextIndex());

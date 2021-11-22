@@ -5,55 +5,38 @@ import java.util.NoSuchElementException;
 
 public class LinkedListIterator<TValue> implements ListIterator<TValue> {
 
-    private int index;
-    private LinkedNode<TValue> next;
-    private LinkedNode<TValue> prev;
-    private LinkedNode<TValue> lastPrevRealized;
-    private LinkedNode<TValue> lastNextRealized;
+    private int index = 0;
+    private boolean receivedNext = false;
+    private boolean receivedPrevious = false;
+    private final LinkedList<TValue> list;
 
-    public LinkedListIterator() { }
-
-    public LinkedListIterator(LinkedNode<TValue> next) {
-        if (next != null) {
-            this.next = next;
-            this.prev = next.prev;
-        }
+    public LinkedListIterator(LinkedList<TValue> list) {
+        this.list = list;
     }
 
-    public LinkedListIterator(LinkedNode<TValue> next, int nextIndex) {
-        this.next = next;
-        prev = next.prev;
-        index = nextIndex;
+    public LinkedListIterator(LinkedList<TValue> list, int index) {
+        this.list = list;
+        this.index = index;
     }
 
-    public boolean hasNext() {
-        return next != null;
-    }
+    public boolean hasNext() { return index < list.size(); }
 
     public TValue next() {
-        if (next == null)
+        if (!hasNext())
             throw new NoSuchElementException();
-        index++;
-        lastNextRealized = next;
-        lastPrevRealized = null;
-        prev = next;
-        next = next.next;
-        return lastNextRealized.value;
+        receivedNext = true;
+        receivedPrevious = false;
+        return list.get(index++);
     }
 
-    public boolean hasPrevious() {
-        return prev != null;
-    }
+    public boolean hasPrevious() { return index > 0; }
 
     public TValue previous() {
-        if (prev == null)
+        if (!hasPrevious())
             throw new NoSuchElementException();
-        index--;
-        lastPrevRealized = prev;
-        lastNextRealized = null;
-        next = prev;
-        prev = prev.prev;
-        return lastPrevRealized.value;
+        receivedNext = false;
+        receivedPrevious = true;
+        return list.get(--index);
     }
 
     public int nextIndex() {
@@ -65,38 +48,28 @@ public class LinkedListIterator<TValue> implements ListIterator<TValue> {
     }
 
     public void remove() {
-        if (lastNextRealized != null) {
-            prev = prev.prev;
-            index--;
-        }
-        else if (lastPrevRealized != null)
-            next = next.next;
+        if (receivedNext)
+            list.remove(--index);
+        else if (receivedPrevious)
+            list.remove(index);
         else
             throw new IllegalStateException();
-        if (next != null) next.prev = prev;
-        if (prev != null) prev.next = next;
-        lastPrevRealized = null;
-        lastNextRealized = null;
+        receivedNext = false;
+        receivedPrevious = false;
     }
 
     public void set(TValue value) {
-        if (lastNextRealized != null)
-            lastNextRealized.value = value;
-        else if (lastPrevRealized != null)
-            lastPrevRealized.value = value;
+        if (receivedNext)
+            list.set(previousIndex(), value);
+        else if (receivedPrevious)
+            list.set(nextIndex(), value);
         else
             throw new IllegalStateException();
     }
 
     public void add(TValue value) {
-        LinkedNode<TValue> newNode = new LinkedNode<>(value);
-        newNode.next = next;
-        newNode.prev = prev;
-        if (next != null) next.prev = newNode;
-        if (prev != null) prev.next = newNode;
-        prev = newNode;
-        index++;
-        lastNextRealized = null;
-        lastPrevRealized = null;
+        list.add(index++, value);
+        receivedNext = false;
+        receivedPrevious = false;
     }
 }
