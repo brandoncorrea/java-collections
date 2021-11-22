@@ -9,13 +9,9 @@ public class ArrayListIterator<T> implements ListIterator<T> {
     private boolean previousCalled = false;
     private boolean nextCalled = false;
 
-    public ArrayListIterator() {
-        list = new ArrayList<>();
-    }
+    public ArrayListIterator() { list = new ArrayList<>(); }
 
-    public ArrayListIterator(T[] values) {
-        list = new ArrayList<>(values);
-    }
+    public ArrayListIterator(T[] values) { list = new ArrayList<>(values); }
 
     public ArrayListIterator(T[] values, int nextIndex) {
         list = new ArrayList<>(values);
@@ -41,7 +37,8 @@ public class ArrayListIterator<T> implements ListIterator<T> {
     public T previous() {
         nextCalled = false;
         previousCalled = true;
-        return list.get(index-- - 1); }
+        return list.get(--index);
+    }
 
     public int nextIndex() {
         return index;
@@ -53,7 +50,7 @@ public class ArrayListIterator<T> implements ListIterator<T> {
 
     public void remove() {
         if (nextCalled)
-            list.remove(index-- - 1);
+            list.remove(--index);
         else if (previousCalled)
             list.remove(index);
         else
@@ -62,18 +59,18 @@ public class ArrayListIterator<T> implements ListIterator<T> {
         previousCalled = false;
     }
 
-    public void set(T t) {
+    public void set(T value) {
         if (nextCalled)
-            list.set(index - 1, t);
+            list.set(previousIndex(), value);
         else if (previousCalled)
-            list.set(index, t);
+            list.set(nextIndex(), value);
         else
             throw new IllegalStateException();
     }
 
-    public void add(T t) {
+    public void add(T value) {
         nextCalled = false;
         previousCalled = false;
-        list.add(index++, t);
+        list.add(index++, value);
     }
 }
